@@ -1,0 +1,5 @@
+# rename this file to Golf.yml and put a : in front of "name" if
+# you want to use yaml like in old versions of Catalyst
+name: Golf
+Model::Kioku:
+    dsn: "bdb:dir=/Users/andremar/Projects/golf/db/"
