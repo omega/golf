@@ -12,4 +12,4 @@ use Data::Dump qw/dump/;
 use Golf::Domain;
 
 
-my $d = Golf::Domain->connect(%$cfg, create => 1);
+my $d = Golf::Domain->new(%$cfg, extra_args => { create => 1 } );
