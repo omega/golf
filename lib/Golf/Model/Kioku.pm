@@ -9,6 +9,5 @@ BEGIN {
 __PACKAGE__->config(
     model_class => 'Golf::Domain',
 );
-# $c->model("kiokudb")->lookup($id);
 
 1;

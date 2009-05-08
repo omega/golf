@@ -26,11 +26,9 @@ Golf::Controller::Root - Root Controller for Golf
 
 =cut
 
-sub default : Private {
+sub index : Private {
     my ( $self, $c ) = @_;
 
-    # Hello World
-    $c->response->body( $c->welcome_message );
 }
 
 =head2 end

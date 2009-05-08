@@ -1,0 +1,7 @@
+[% PROCESS player/submenu.tt %]
+
+<ul>
+[% FOREACH attr IN attrs %]
+    <li>[% attr.name %] - [% attr.type_constraint %]</li>
+[% END %]
+</ul>
