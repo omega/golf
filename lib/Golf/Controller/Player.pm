@@ -27,9 +27,9 @@ sub index : Private {
     my ( $self, $c ) = @_;
     
     $c->stash(
-        players => [$c->model('Kioku')->search({
+        players => $c->model('Kioku')->search({
             TYPE => 'Player'
-        })->all],
+        }),
     );
 }
 
