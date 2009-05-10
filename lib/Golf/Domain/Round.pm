@@ -1,6 +1,6 @@
-use MooseX::Declare
+use MooseX::Declare;
 
-class Golf::Domain::Round {
+class Golf::Domain::Round with Golf::Domain::Meta::Extractable {
     use KiokuDB::Util qw(set);
     
 =pod

@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 
 use strict;
-use Test::More tests => 1;
+use Test::More tests => 2;
 use t::Test;
 
 
@@ -13,13 +13,12 @@ my $pid;
     my $u = $D->create(Player => { 
         id => 'omega',
         name => 'Andreas Marienborg',
-        password => ''
+        password => 'a',
+        cpassword => 'a',
     });
     
     my $pid = $D->store($u);
 }
-
-diag(" UID: " . $pid);
 
 {
     my $s = $D->new_scope;
@@ -27,3 +26,11 @@ diag(" UID: " . $pid);
     my $u = $D->lookup("user:omega");
     is($u->name, "Andreas Marienborg");
 }
+
+{
+    my $s = $D->new_scope;
+
+    my $p = $D->find(Player => { name => 'Andreas Marienborg'} );
+    isa_ok($p, "Golf::Domain::Player");
+}
+

@@ -1,0 +1,40 @@
+div#content {
+}
+
+
+
+form {
+    border: 2px solid silver;
+    padding: 10px;
+}
+    form label {
+        display: block;
+        width: 25%;
+        position: relative;
+        line-height: 1.8em;
+        padding-right: 75%;
+        text-align: right;
+        font-size: 1.1em;
+    }
+        form label input {
+            position: absolute;
+            left: 27%;
+            width: 60%;
+            border: 1px solid silver;
+            padding: 2px 3px;
+            font-size: inherit;
+        }
+        form label textarea {
+            position: absolute;
+            width: 60%;
+            left: 27%;
+            height: 5em;
+            font-size: inherit;
+            top: 0;
+            margin-top: 1px;
+            border: 1px solid silver;
+        }
+        form label .spacer {
+            height: 3.5em;
+        }
+

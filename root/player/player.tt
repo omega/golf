@@ -1,0 +1,31 @@
+[% PROCESS player/submenu.tt %]
+
+<form action="[% c.uri_for(c.action) %]" method="POST">
+    <label for="id">
+        Username
+        <input type="text" id="id" name="id" value="[% c.req.param('id') || p.id %]" />
+    </label>
+    
+    <label for="password">
+        Password
+        <input type="password" id="password" name="password" />
+    </label>
+    <label for="cpassword">
+        Confirm password
+        <input type="password" id="cpassword" name="cpassword" />
+    </label>
+    
+    <label for="name">
+        Name
+        <input type="text" id="name" name="name" value="[% c.req.param('name') || p.name  %]" />
+    </label>
+    <label for="description">
+        Description
+        <div class="spacer"></div>
+        <textarea id="description" name="description" />[%  c.req.param('description') || p.description %]</textarea>
+    </label>
+    
+    <label>
+        <button type="submit">Submit</button>
+    </label>
+</form>

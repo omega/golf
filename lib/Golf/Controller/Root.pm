@@ -25,7 +25,12 @@ Golf::Controller::Root - Root Controller for Golf
 =head2 default
 
 =cut
-
+sub begin : Private {
+    my ( $self, $c ) = @_;
+    
+    $c->assets->include('static/css/base.css');
+    
+}
 sub index : Private {
     my ( $self, $c ) = @_;
 

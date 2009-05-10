@@ -8,5 +8,12 @@ class Golf::Domain::Player with KiokuX::User with Golf::Domain::Meta::Extractabl
         isa => 'Str', 
         required => 0
     );
+    has 'description' => (
+        traits => [qw/Extract/],
+        is => 'rw',
+        isa => 'Str',
+        required => 0,
+    );
+    
     
 }

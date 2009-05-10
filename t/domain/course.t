@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 
 use strict;
-use Test::More tests => 5;
+use Test::More tests => 6;
 use t::Test;
 use Data::Dump qw/dump/;
 
@@ -30,8 +30,12 @@ my $cid;
     # Check the damn holes?
     
     my @holes = $c->holes;
-    diag(dump(@holes));
     isa_ok($holes[0], "Golf::Domain::Hole");
     is($holes[3]->par, 4);
     
+}
+{
+    my $s = $D->new_scope;
+    my $c = $D->find(Course => { name => 'Ekeberg' });
+    isa_ok($c, "Golf::Domain::Course");
 }

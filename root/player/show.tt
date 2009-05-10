@@ -1,0 +1,4 @@
+[% PROCESS player/submenu.tt %]
+<h2>[% player.name %]</h2>
+<p>[% player.description %]</p>
+<p><a href="[% c.uri_for(c.action, "edit") %]">Edit player</a></p>

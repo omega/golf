@@ -2,6 +2,7 @@
 <html>
     <head>
         <title>Golf</title>
+        [% c.assets.export %]
     </head>
     <body>
         <h1 id="logo"><a href="[% c.uri_for('/') %]">Golfscore Tracker</a></h1>
@@ -9,6 +10,12 @@
             <li><a href="[% c.uri_for('/player') %]">Players</a></li>
         </ul>
         <div id="content">
+            [% IF msg %]
+            <p class="msg">[% msg %]</p>
+            [% END %]
+            [% IF err %]
+            <p class="err">[% err %]</p>
+            [% END %]
             [% content %]
         </div>
     </body>

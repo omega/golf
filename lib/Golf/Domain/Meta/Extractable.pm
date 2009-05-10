@@ -4,11 +4,12 @@ role Golf::Domain::Meta::Extractable {
     use Data::Dump qw/dump/;
     use Golf::Domain::Meta::Attribute::Trait::Extract;
     method extract(:$entry) {
+        my $cls = ref $self;
+        $cls =~ s/^Golf::Domain:://;
         my $attr = {
               %{ $self->extract_attributes },
-              __CLASS__ => ref $self
+              TYPE => $cls
         };
-        
         $attr;
     }
     
@@ -20,7 +21,7 @@ role Golf::Domain::Meta::Extractable {
                     # XXX: this needs to be generalized, specify ->name somehow
                     $val = $val->name
                 }
-                $_->name => (defined($val) ? $val : undef);
+                (defined $val ? ($_->name => $val) : ());
             } grep {
                 $_->does('Golf::Domain::Meta::Attribute::Trait::Extract')
             } $self->meta->get_all_attributes

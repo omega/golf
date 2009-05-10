@@ -9,8 +9,15 @@ requires 'Catalyst::Runtime' => '5.80002';
 requires 'Catalyst::Plugin::ConfigLoader';
 requires 'Catalyst::Plugin::Static::Simple';
 requires 'Catalyst::Action::RenderView';
-requires 'Config::General'; # This should reflect the config file format you've chosen
+requires 'Config::YAML'; # This should reflect the config file format you've chosen
                  # See Catalyst::Plugin::ConfigLoader for supported formats
+
+
+requires 'Catalyst::Model::KiokuDB';
+
+requires 'Module::Load';
+
+
 catalyst;
 
 install_script glob('script/*.pl');

@@ -11,7 +11,7 @@ our $D;
 sub import {
     my ($exp, @imports) = @_;
     # create the db
-    $D = Golf::Domain->new(dsn => 'bdb:dir=t/db', extra_args => { create => 1 });
+    $D = Golf::Domain->new(dsn => 'bdb-gin:dir=t/db', extra_args => { create => 1 });
     # deploy some data?
     
     foreach my $i ( @imports ) {
@@ -33,17 +33,20 @@ sub import_players {
     import_helper( Player => 
         {
             name => 'Andreas Marienborg',
-            password => '',
+            password => 'a',
+            cpassword => 'a',
             id => 'omega',
         },
         {
             name => 'Andreas Nordseth',
-            password => '',
+            password => 'a',
+            cpassword => 'a',
             id => 'seth',
         },
         {
             name => 'Øyvind Rogneslien',
-            password => '',
+            password => 'a',
+            cpassword => 'a',
             id => 'mesh',
         },
         
