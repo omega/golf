@@ -1,1 +1,7 @@
 [% PROCESS player/submenu.tt %]
+
+<ul>
+[% FOREACH player IN players %]
+    <li>[% player.name %]</li>
+[% END %]
+</ul>

@@ -26,8 +26,10 @@ Catalyst Controller.
 sub index : Private {
     my ( $self, $c ) = @_;
     
-    $c->stash(players => $c->model('Kioku')->search(
-        TYPE => 'Player')
+    $c->stash(
+        players => [$c->model('Kioku')->search({
+            TYPE => 'Player'
+        })->all],
     );
 }
 
