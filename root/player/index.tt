@@ -2,6 +2,6 @@
 
 <ul>
 [% FOREACH player IN players.all %]
-    <li>[% player.name %]</li>
+    <li>[% player.name %] - <a href="[% c.uri_for(c.action, player.id) %]">Details</a></li>
 [% END %]
 </ul>

@@ -1,0 +1,25 @@
+[% PROCESS course/submenu.tt %]
+
+<form autocomplete="off" action="[% c.uri_for_action(c.action, c.req.captures) %]" method="POST">
+    <label for="id">
+        Name
+        <input type="text" id="name" name="name" value="[% c.req.param('name') || course.name %]" />
+    </label>
+    
+    
+    <fieldset class="holes">
+        <legend>Holes</legend>
+        <p>Press enter to add new holes, tab when you are done</p>
+        [%# need to loop over holes if they are there, and have an input that
+          # grows if now
+        %]
+        
+        <label for="new_hole">
+            <span>New hole</span>
+            <input id="new_hole" type="text"/>
+        </label>
+    </fieldset>
+    <label>
+        <button type="submit">Submit</button>
+    </label>
+</form>

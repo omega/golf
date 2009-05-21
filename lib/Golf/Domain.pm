@@ -31,7 +31,7 @@ class Golf::Domain extends KiokuX::Model {
         }
         
         my $p = Golf::Domain::Player->new($args);
-        $self->store($p);
+        $self->insert($p);
         
         return $p;
     }
@@ -42,11 +42,21 @@ class Golf::Domain extends KiokuX::Model {
             return $m->($self, $args);
         } else {
             $class = "Golf::Domain::$class";
-            return $class->new($args);
+            warn dump($class => $args);
+            my $o = $class->new($args);
+            $self->insert($o);
+            return $o;
         }
 
     }
-    
+    method update(Object $obj, HashRef $args) {
+        if ($obj->does('Golf::Domain::Meta::Updateable')) {
+            $obj->update($args);
+            $self->update($obj);
+        } else {
+            croak("Cannot update $obj, doesn't do Updateable");
+        }
+    }
     method find(Str $class, HashRef $query) {
         my $stream = $self->search({
             %$query,

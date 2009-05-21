@@ -1,7 +1,8 @@
 use MooseX::Declare;
 
 class Golf::Domain::Round with Golf::Domain::Meta::Extractable {
-    use KiokuDB::Util qw(set);
+
+    use Golf::Domain::Meta::Types qw/PlayerList/;
     
 =pod
 
@@ -18,8 +19,16 @@ class Golf::Domain::Round with Golf::Domain::Meta::Extractable {
 =cut
     
     has 'course' => (
+        traits  => [qw/Extract/],
         is      => 'rw',
         isa     => 'Golf::Domain::Course',
         required => 1,
     );
+    
+    has 'players' => (
+        metaclass => 'Collection::Array',
+        is => 'ro',
+        isa => PlayerList,
+        
+    )
 }

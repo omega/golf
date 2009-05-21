@@ -1,0 +1,7 @@
+[% PROCESS course/submenu.tt %]
+
+<ul>
+[% FOREACH course IN courses.all %]
+    <li>[% course.name %] - <a href="[% c.uri_for(c.action, course.name) %]">Details</a></li>
+[% END %]
+</ul>

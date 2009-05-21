@@ -6,6 +6,7 @@ class Golf::Domain::Course with Golf::Domain::Meta::Extractable {
     has 'name' => (
         is      => 'rw',
         traits => [qw/Extract/],
+        required => 1,
     );
     
     has 'holes' => (

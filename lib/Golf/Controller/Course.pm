@@ -1,4 +1,4 @@
-package Golf::Controller::Player;
+package Golf::Controller::Course;
 
 use strict;
 use warnings;
@@ -6,7 +6,7 @@ use base 'Catalyst::Controller';
 
 =head1 NAME
 
-Golf::Controller::Player - Catalyst Controller
+Golf::Controller::Course - Catalyst Controller
 
 =head1 DESCRIPTION
 
@@ -20,13 +20,19 @@ Catalyst Controller.
 =head2 index 
 
 =cut
-
+sub auto : Private {
+    my ($self, $c) = @_;
+    
+    $c->assets->include('static/js/course.js');
+    
+    1;
+}
 sub index : Private {
     my ( $self, $c ) = @_;
     
     $c->stash(
-        players => $c->model('Kioku')->search({
-            TYPE => 'Player'
+        courses => $c->model('Kioku')->search({
+            TYPE => 'Course'
         }),
     );
 }
@@ -39,28 +45,28 @@ sub create : Local {
 
         $c->log->debug('POST recieved') if $c->debug;
         my $p = eval { 
-            $c->model('Kioku')->model->create_player($c->req->params);
+            $c->model('Kioku')->model->create(Course => $c->req->params);
         };
         if ($@) {
             $c->stash( err => 'Error: ' . $@);
             $c->log->debug('Something went wrong with creating: ' . $@) 
                 if $c->debug;
         } else {
-            $c->flash( msg => 'User created' );
-            $c->res->redirect($c->uri_for('/player', $p->id ));
+            $c->flash( msg => 'Course created' );
+            $c->res->redirect($c->uri_for('/course', $p->name ));
             
         }
         
     }
     
-    $c->stash(template => 'player/player.tt');
+    $c->stash(template => 'course/course.tt');
 }
 
-sub load : Chained('/') CaptureArgs(1) PathPart('player') {
+sub load : Chained('/') CaptureArgs(1) PathPart('course') {
     my ($self, $c, $id) = @_;
-    my $p = $c->model('Kioku')->lookup('user:' . $id);
+    my $p = $c->model('Kioku')->model->find('Course' => { name => $id });
     $c->log->debug('found player: ' . $p) if $c->debug;
-    $c->stash( player =>  $p);
+    $c->stash( course =>  $p);
 }
 
 sub show : Chained('load') Args(0) PathPart('') {
@@ -70,16 +76,15 @@ sub show : Chained('load') Args(0) PathPart('') {
 sub edit : Chained('load') Args(0) PathPart('edit') {
     my ($self, $c) = @_;
     
-    $c->stash(template => 'player/player.tt');
+    $c->stash(template => 'course/course.tt');
     
     if ($c->req->method eq 'POST') {
         $c->log->debug('Gonna try to update the damn player :p') if $c->debug;
         
-        $c->model('Kioku')->model->update($c->stash->{player} => $c->req->params);
+        $c->model('Kioku')->model->update($c->stash->{course} => $c->req->params);
         
     }
 }
-
 
 =head1 AUTHOR
 

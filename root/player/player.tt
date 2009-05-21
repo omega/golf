@@ -1,9 +1,9 @@
 [% PROCESS player/submenu.tt %]
 
-<form action="[% c.uri_for(c.action) %]" method="POST">
+<form action="[% c.uri_for_action(c.action, c.req.captures) %]" method="POST">
     <label for="id">
         Username
-        <input type="text" id="id" name="id" value="[% c.req.param('id') || p.id %]" />
+        <input type="text" id="id" name="id" value="[% c.req.param('id') || player.id %]" />
     </label>
     
     <label for="password">
@@ -17,12 +17,12 @@
     
     <label for="name">
         Name
-        <input type="text" id="name" name="name" value="[% c.req.param('name') || p.name  %]" />
+        <input type="text" id="name" name="name" value="[% c.req.param('name') || player.name  %]" />
     </label>
     <label for="description">
         Description
         <div class="spacer"></div>
-        <textarea id="description" name="description" />[%  c.req.param('description') || p.description %]</textarea>
+        <textarea id="description" name="description" />[%  c.req.param('description') || player.description %]</textarea>
     </label>
     
     <label>

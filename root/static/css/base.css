@@ -7,6 +7,12 @@ form {
     border: 2px solid silver;
     padding: 10px;
 }
+    form fieldset {
+        padding: 20px;
+        margin: 10px;
+        width: 57%;
+        margin-left: 27%;
+    }
     form label {
         display: block;
         width: 25%;

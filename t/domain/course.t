@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 
 use strict;
-use Test::More tests => 6;
+use Test::More tests => 8;
 use t::Test;
 use Data::Dump qw/dump/;
 
@@ -21,6 +21,16 @@ my $cid;
     $cid = $D->store($c);
 }
 
+{
+    # create a one hole course
+    my $s = $D->new_scope;
+    my $c = $D->create( 'Course' => {
+        name => 'SmallCourse',
+        holes => 3
+    });
+    is($c->size, 1);
+    is($c->par, 3);
+}
 
 {
     my $s = $D->new_scope;

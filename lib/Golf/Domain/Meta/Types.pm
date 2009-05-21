@@ -23,7 +23,12 @@ coerce HoleArray,
     from ArrayRef[Int],
         via { my @holes = map { 
             Golf::Domain::Hole->new( par => $_ ) 
-        } @$_; \@holes }
+        } @$_; \@holes },
+    from Int,
+        via {
+            [Golf::Domain::Hole->new( par => $_ ) ]
+        }
+    
 ;
 
 class_type Player, { class => 'Golf::Domain::Player' };
