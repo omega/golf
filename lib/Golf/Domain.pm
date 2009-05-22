@@ -4,10 +4,7 @@ use MooseX::Declare;
 
 class Golf::Domain extends KiokuX::Model {
 
-    # XXX: Fix this somehow, its annoying!
-    use Golf::Domain::Player;
-    use Golf::Domain::Course;
-    use Golf::Domain::Round;
+    use MooseX::ClassAttribute;
     
     use KiokuX::User::Util qw(crypt_password);
     use Carp qw/croak/;
@@ -15,10 +12,15 @@ class Golf::Domain extends KiokuX::Model {
     use Search::GIN::Extract::Callback;
     
     use Data::Dump qw/dump/;
+    class_has '_singleton' => (
+        is => 'rw',
+        isa => 'HashRef',
+        default => sub { { } },
+    );
     
     # XXX: Should this really be in the Player-class?
     method create_player(HashRef $args) {
-
+        
         # check password and cpassword
         croak("need id column") unless $args->{id};
         if ($args->{password} and $args->{cpassword}
@@ -29,6 +31,9 @@ class Golf::Domain extends KiokuX::Model {
         } else {
             croak("Password and cpassword does not match, or one is missing");
         }
+        
+        Class::MOP::load_class("Golf::Domain::Player") 
+            unless Class::MOP::is_class_loaded("Golf::Domain::Player");
         
         my $p = Golf::Domain::Player->new($args);
         $self->insert($p);
@@ -42,7 +47,8 @@ class Golf::Domain extends KiokuX::Model {
             return $m->($self, $args);
         } else {
             $class = "Golf::Domain::$class";
-            warn dump($class => $args);
+            Class::MOP::load_class($class) 
+                unless Class::MOP::is_class_loaded($class);
             my $o = $class->new($args);
             $self->insert($o);
             return $o;
@@ -74,7 +80,16 @@ class Golf::Domain extends KiokuX::Model {
         );
         return $orig->($self, $q);
     }
-    
+        
+    around _build_directory() {
+        
+        return $self->_singleton->{$self->dsn} if $self->_singleton->{$self->dsn};
+
+        my $dir = $orig->($self);
+        $self->_singleton->{$self->dsn} = $dir;
+        
+        return $dir;
+    }
     
     around _build__connect_args() {
         

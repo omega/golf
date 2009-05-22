@@ -23,7 +23,9 @@ Catalyst Controller.
 
 sub index : Private {
     my ( $self, $c ) = @_;
-
+    $c->stash( rounds => $c->model('Kioku')->search({
+        TYPE => 'Round',
+    }));
 }
 
 sub auto : Private {
@@ -32,6 +34,9 @@ sub auto : Private {
     $c->stash(
         courses => $c->model('Kioku')->search({
             TYPE => 'Course'
+        }),
+        players => $c->model('Kioku')->search({
+            TYPE => 'Player'
         }),
     );
     $c->assets->include('static/js/round.js');

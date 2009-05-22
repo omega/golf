@@ -1,0 +1,10 @@
+[% PROCESS round/submenu.tt %]
+
+<h2>A round of discgolf at [% round.course.name %]</h2>
+<h3>Date: [% round.date %]</h3>
+<h3>Players</h3>
+<ul>
+    [% FOREACH player IN round.players %]
+    <li>[% player.name %]</li>
+    [% END %]
+</ul>

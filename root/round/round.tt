@@ -14,6 +14,15 @@
         <input id="date" name="date" />
     </label>
     
+    <fieldset class="checkboxes">
+        <legend>Players</legend>
+        [% FOREACH player IN players.all %]
+        <label for="p_[% player.id %]">
+            <input id="p_[% player.id %]" type="checkbox" name="players" value="[% player.id %]" />
+            [% player.name %]
+        </label>
+        [% END %]
+    </fieldset>
     <label>
         <button type="submit">Submit</button>
     </label>

@@ -83,4 +83,16 @@ form {
         form label .spacer {
             height: 3.5em;
         }
-
+    form fieldset.checkboxes {
+        
+    }
+        form fieldset.checkboxes label {
+            width: 75%;
+            padding-left: 25%;
+            padding-right: 15px;
+            text-align: left;
+        }
+            form fieldset.checkboxes input {
+                left: 17%;
+                top: 6px;
+            }

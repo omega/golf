@@ -10,6 +10,8 @@ our $D;
 
 sub import {
     my ($exp, @imports) = @_;
+    
+    $ENV{GOLF_DSN} = 'bdb-gin:dir=t/db';
     # create the db
     $D = Golf::Domain->new(dsn => 'bdb-gin:dir=t/db', extra_args => { create => 1 });
     # deploy some data?
@@ -88,9 +90,6 @@ sub import_helper {
 }
 
 sub END {
-    
-    warn "# CLEANUP";
-    # cleanup, oh yeah :)
     
     File::Path::rmtree('t/db');
     

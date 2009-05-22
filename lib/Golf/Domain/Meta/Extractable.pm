@@ -17,9 +17,13 @@ role Golf::Domain::Meta::Extractable {
         return {
             map {
                 my $val = $_->get_value($self);
-                if (ref($val) and $val->does('Golf::Domain::Meta::Extractable')) {
+                if (ref($val) and $val->can('does')
+                    and $val->does('Golf::Domain::Meta::Extractable')) {
                     # XXX: this needs to be generalized, specify ->name somehow
                     $val = $val->name
+                } else {
+                    # uho, how to handle?
+                    $val = undef;
                 }
                 (defined $val ? ($_->name => $val) : ());
             } grep {
