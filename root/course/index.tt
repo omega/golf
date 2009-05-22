@@ -2,6 +2,6 @@
 
 <ul>
 [% FOREACH course IN courses.all %]
-    <li>[% course.name %] - <a href="[% c.uri_for(c.action, course.name) %]">Details</a></li>
+    <li>[% course.name %], par [% course.par %] - <a href="[% c.uri_for(c.action, course.name) %]">Details</a></li>
 [% END %]
 </ul>

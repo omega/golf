@@ -13,7 +13,16 @@
         [%# need to loop over holes if they are there, and have an input that
           # grows if now
         %]
-        
+        [%
+          SET holes = c.req.param('holes') || course.holes;
+          SET i = 1
+        %]
+        [% FOREACH hole IN holes %]
+        <label for="hole_[% i %]">
+            <span>Hole #[% i %]</span>
+            <input name="holes" id="hole_[% i %]" type="text" value="[% hole.par || hole %]" />
+        </label>
+        [% SET i = i + 1; END %]
         <label for="new_hole">
             <span>New hole</span>
             <input id="new_hole" type="text"/>

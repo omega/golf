@@ -1,6 +1,9 @@
 use MooseX::Declare;
 
-class Golf::Domain::Course with Golf::Domain::Meta::Extractable {
+class Golf::Domain::Course 
+with Golf::Domain::Meta::Extractable 
+with Golf::Domain::Meta::Updateable 
+{
     use MooseX::AttributeHelpers;
     use Golf::Domain::Meta::Types qw/HoleArray/;
     has 'name' => (
@@ -11,7 +14,7 @@ class Golf::Domain::Course with Golf::Domain::Meta::Extractable {
     
     has 'holes' => (
         metaclass => 'Collection::Array',
-        is => 'ro',
+        is => 'rw',
         isa => HoleArray,
         default => sub { [] },
         coerce => 1,
@@ -20,11 +23,11 @@ class Golf::Domain::Course with Golf::Domain::Meta::Extractable {
             'push' => 'add_hole',
             'count' => 'size',
             'map' => '_map',
+            'clear' => '_clear_holes',
         },
         
         
     );
-    
     method par() {
         my $s = 0;
         $self->_map( sub { $s = $s + $_->par  } );

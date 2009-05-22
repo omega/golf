@@ -1,10 +1,50 @@
+h1#logo {
+    padding-bottom: 1em;
+    border-bottom: 1px solid #ddd;
+}
 div#content {
 }
+    ul.submenu {
+        border: 1px solid #ddd;
+        -webkit-border-radius: 10px;
+        padding: 5px 20px;
+        position: absolute;
+        top: 40px;
+        left: 300px;
+        padding-right: 5px;
+    }
+        ul.submenu li {
+            list-style: none;
+            float: left;
+            margin-right: 15px;
+        }
+div#wrapper {
+    width: 880px;
+    margin: 15px auto;
+    position: relative;
+    border: 1px solid silver;
+    padding: 15px;
+}
+
+ul#menu {
+    position: absolute;
+    left: 300px;
+    top: 0;
+    background: #ddd;
+    -webkit-border-radius: 10px;
+    padding: 5px 20px;
+    padding-right: 5px;
+    
+}
+    ul#menu li {
+        list-style: none;
+        float: left;
+        margin-right: 15px;
+    }
 
 
 
 form {
-    border: 2px solid silver;
     padding: 10px;
 }
     form fieldset {
@@ -22,7 +62,7 @@ form {
         text-align: right;
         font-size: 1.1em;
     }
-        form label input {
+        form label input, form label select {
             position: absolute;
             left: 27%;
             width: 60%;

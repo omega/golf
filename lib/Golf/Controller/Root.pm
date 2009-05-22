@@ -29,6 +29,7 @@ sub begin : Private {
     my ( $self, $c ) = @_;
     
     $c->assets->include('static/css/base.css');
+    $c->assets->include('static/themes/smoothness/jquery-ui-1.7.1.custom.css');
     
 }
 sub index : Private {

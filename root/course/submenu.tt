@@ -1,3 +1,4 @@
 <ul class="submenu">
+    <li><a href="[% c.uri_for('/course/') %]">List courses</a></li>
     <li><a href="[% c.uri_for('/course/create') %]">Add course</a></li>
 </ul>

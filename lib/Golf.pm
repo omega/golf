@@ -15,7 +15,7 @@ use Catalyst::Runtime '5.70';
 
 use Catalyst qw/
     ConfigLoader 
-    
+
     Assets
     
     Session
@@ -36,7 +36,12 @@ our $VERSION = '0.01';
 # with a external configuration file acting as an override for
 # local deployment.
 
-__PACKAGE__->config( name => 'Golf' );
+__PACKAGE__->config( 
+    name => 'Golf',
+    stacktrace => {
+        verbose => 2,
+    }
+);
 
 # Start the application
 __PACKAGE__->setup;

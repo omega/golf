@@ -1,0 +1,7 @@
+[% PROCESS round/submenu.tt %]
+
+<ul>
+[% FOREACH round IN rounds.all %]
+    <li>[% round.course.name %], [% round.date %] - <a href="[% c.uri_for(c.action, round.id) %]">Details</a></li>
+[% END %]
+</ul>

@@ -13,7 +13,9 @@ role Golf::Domain::Meta::Updateable {
                 if ($attr->has_write_method and $attrs->{$k}) {
                     warn "setting $k to " . $attrs->{$k};
                     my $m = $attr->get_write_method;
-                    $attr->$m($attrs->{$k});
+                    $self->$m($attrs->{$k});
+                } elsif (my $m = $self->can("update_$k")) {
+                    $self->$m($attrs->{$k});
                 }
             }
         }

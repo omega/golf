@@ -1,0 +1,21 @@
+[% PROCESS round/submenu.tt %]
+
+<form autocomplete="off" action="[% c.uri_for_action(c.action, c.req.captures) %]" method="POST">
+    <label for="course">
+        Course
+        <select id="course" name="course">
+            [% FOREACH course IN courses.all %]
+            <option>[% course.name %]</option>
+            [% END %]
+        </select>
+    </label>
+    <label for="date">
+        Date
+        <input id="date" name="date" />
+    </label>
+    
+    <label>
+        <button type="submit">Submit</button>
+    </label>
+    
+</form>
