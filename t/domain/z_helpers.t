@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 
 use strict;
-use Test::More tests => 5;
+use Test::More tests => 10;
 use Test::Exception;
 use t::Test;
 
@@ -39,4 +39,33 @@ use t::Test;
             isa_ok($player, "Golf::Domain::Player");
         }
     }
+    
+    my $course = $D->create(Course => {
+        name => 'Ekeberg',
+        holes => [3,4,5,1,2],
+    });
+    isa_ok($course, "Golf::Domain::Course");
+    is($course->par, 15);
+    my $round = $D->create( Round => {
+        course => $course,
+        players => $p,
+        date => '2009-05-22',
+    });
+    
+    
+    my $frogner = $D->create(Course => {
+        name => 'Frogner',
+        holes => [3,4,1,3],
+    });
+    
+    $D->update($round => { course => 'Frogner' });
+    
+    is($round->course->name, "Frogner");
+    is($D->search({TYPE => 'Round'})->all, 1);
+}
+{
+    my $s = $D->new_scope;
+    
+    my $c = $D->find(Round => {course => "Frogner"});
+    is($c->course->par, 11)
 }

@@ -7,7 +7,7 @@ class Golf::Domain extends KiokuX::Model {
     use MooseX::ClassAttribute;
     
     use KiokuX::User::Util qw(crypt_password);
-    use Carp qw/croak/;
+    use Carp qw/croak carp/;
     use Search::GIN::Query::Manual;
     use Search::GIN::Extract::Callback;
     
@@ -58,31 +58,40 @@ class Golf::Domain extends KiokuX::Model {
     method update(Object $obj, HashRef $args) {
         if ($obj->does('Golf::Domain::Meta::Updateable')) {
             $obj->update($args);
-            warn "Calling update on the directory";
-            $self->directory->store($obj);
-            warn "returning from update on directory";
+            $self->directory->update($obj);
         } else {
             croak("Cannot update $obj, doesn't do Updateable");
         }
     }
     method find(Str $class, HashRef $query) {
         my $stream = $self->search({
+            # XXX: this results in OR, which is bad            TYPE => $class,
             %$query,
-            TYPE => $class,
         });
         my @all = $stream->all;
+        if (scalar(@all) > 1) {
+            carp("found " . scalar(@all) . " objects with find, something wrong?\n" .
+                join(", ", map { $_->name } @all)
+            );
+        }
         return $all[0];
     }
     
     around search(HashRef $args) {
         my $q = Search::GIN::Query::Manual->new(
-            values => $args
+            values => $args,
+            method => 'all',
         );
         return $orig->($self, $q);
     }
         
     around _build_directory() {
-        
+
+        if ($self->dsn eq 'copy') {
+            if (my ($k) = keys(%{ $self->_singleton })) {
+                return $self->_singleton->{$k};
+            }
+        }
         return $self->_singleton->{$self->dsn} if $self->_singleton->{$self->dsn};
 
         my $dir = $orig->($self);

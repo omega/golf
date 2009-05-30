@@ -11,20 +11,16 @@ class Golf::Domain::Search {
         
         # XXX: Get config I presume?
         
-        Golf::Domain->new(dsn => $ENV{GOLF_DSN} || 'bdb-gin:dir=db/');
+        Golf::Domain->new(dsn => $ENV{GOLF_DSN} || 'copy');
     };
     
     
     method coerce_player($class: Str $id) {
-        my $d = $class->domain;
-        my $s = $d->new_scope;
-        $d->lookup('user:' . $id);
+        $class->domain->lookup('user:' . $id);
     }
     
     method coerce_course($class: Str $name) {
-        my $d = $class->domain;
-        my $s = $d->new_scope;
-        $d->find(Course => { name => $name });
+        $class->domain->find(Course => { name => $name });
         
     }
 };

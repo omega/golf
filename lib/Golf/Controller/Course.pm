@@ -20,6 +20,7 @@ Catalyst Controller.
 =head2 index 
 
 =cut
+
 sub auto : Private {
     my ($self, $c) = @_;
     

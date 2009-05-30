@@ -2,9 +2,32 @@
 
 <h2>A round of discgolf at [% round.course.name %]</h2>
 <h3>Date: [% round.date %]</h3>
+<p><a href="[% c.uri_for_action(c.action(), c.req.captures, 'edit') %]">Edit round</a></p>
 <h3>Players</h3>
 <ul>
     [% FOREACH player IN round.players %]
-    <li>[% player.name %]</li>
+    <li><a href="[% c.uri_for('/player', player.id) %]">[% player.name %]</a></li>
     [% END %]
 </ul>
+<h3>Scores</h3>
+<table>
+    <thead>
+    <tr>
+        <th>Hole</th>
+        [% FOREACH player IN round.players %]
+        <th>[% player.id %]</th>
+        [% END %]
+    </tr>
+    </thead>
+    <tbody>
+    [% SET hc = 0; 
+       FOREACH hole IN round.course.holes; SET hc = hc +1 %]
+    <tr>
+        <td>[% hc %]</td>
+        [% FOREACH player IN round.players %]
+        <td>[% round.scores.get_player(player.id) %]</td>
+        [% END %]
+    </tr>
+    [% END%]
+    </tbody>
+</table>

@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 
 use strict;
-use Test::More tests => 8;
+use Test::More tests => 10;
 use t::Test;
 use Data::Dump qw/dump/;
 
@@ -48,4 +48,11 @@ my $cid;
     my $s = $D->new_scope;
     my $c = $D->find(Course => { name => 'Ekeberg' });
     isa_ok($c, "Golf::Domain::Course");
+    is($c->name, "Ekeberg");
+}
+{
+    my $s = $D->new_scope;
+    my $c = $D->search({ name => 'Ekeberg' });
+    my @all = $c->all;
+    is(scalar(@all), 1);
 }

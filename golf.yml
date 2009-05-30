@@ -2,6 +2,7 @@
 # you want to use yaml like in old versions of Catalyst
 name: Golf
 Model::Kioku:
-    dsn: "bdb-gin:dir=/Users/andremar/Projects/golf/db/"
+    dsn: "bdb-gin:dir=db/"
+#    dsn: "dbi:SQLite:dbname=db.sqlite"
 session:
     flash_to_stash: 1

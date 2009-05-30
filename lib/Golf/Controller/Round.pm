@@ -21,13 +21,6 @@ Catalyst Controller.
 
 =cut
 
-sub index : Private {
-    my ( $self, $c ) = @_;
-    $c->stash( rounds => $c->model('Kioku')->search({
-        TYPE => 'Round',
-    }));
-}
-
 sub auto : Private {
     my ( $self, $c ) = @_;
     
@@ -43,6 +36,14 @@ sub auto : Private {
     
     return 1;
 }
+
+sub index : Private {
+    my ( $self, $c ) = @_;
+    $c->stash( rounds => $c->model('Kioku')->search({
+        TYPE => 'Round',
+    }));
+}
+
 sub create : Local {
     my ( $self, $c ) = @_;
 
@@ -85,7 +86,7 @@ sub edit : Chained('load') Args(0) PathPart('edit') {
     $c->stash(template => 'round/round.tt');
     
     if ($c->req->method eq 'POST') {
-        $c->log->debug('Gonna try to update the damn course :p') if $c->debug;
+        $c->log->debug('Gonna try to update the damn round :p') if $c->debug;
         
         $c->model('Kioku')->model->update($c->stash->{round} => $c->req->params);
         

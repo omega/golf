@@ -2,6 +2,7 @@ use MooseX::Declare;
 
 role Golf::Domain::Meta::Extractable {
     use Data::Dump qw/dump/;
+    use Carp qw/carp/;
     use Golf::Domain::Meta::Attribute::Trait::Extract;
     method extract(:$entry) {
         my $cls = ref $self;
@@ -21,9 +22,6 @@ role Golf::Domain::Meta::Extractable {
                     and $val->does('Golf::Domain::Meta::Extractable')) {
                     # XXX: this needs to be generalized, specify ->name somehow
                     $val = $val->name
-                } else {
-                    # uho, how to handle?
-                    $val = undef;
                 }
                 (defined $val ? ($_->name => $val) : ());
             } grep {

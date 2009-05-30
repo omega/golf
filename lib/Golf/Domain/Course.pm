@@ -21,6 +21,7 @@ with Golf::Domain::Meta::Updateable
         auto_deref => 1,
         provides => {
             'push' => 'add_hole',
+            'get' => 'get_hole',
             'count' => 'size',
             'map' => '_map',
             'clear' => '_clear_holes',

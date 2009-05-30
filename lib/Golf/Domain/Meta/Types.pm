@@ -15,6 +15,7 @@ use Golf::Domain::Hole;
 use Golf::Domain::Search;
 
 use DateTime::Format::ISO8601;
+use DateTime::Format::Strptime;
 
 use MooseX::Types::Moose qw(ArrayRef Int Str);
 use Moose::Util::TypeConstraints;
@@ -66,7 +67,7 @@ class_type Course, { class => 'Golf::Domain::Course' };
 coerce Course, 
     from Str,
         via {
-            Golf::Domain::Search->coerce_course($_)
+            Golf::Domain::Search->coerce_course($_);
         }
 ;
 
@@ -75,7 +76,9 @@ class_type Date, { class => 'DateTime' };
 coerce Date,
     from Str,
         via {
-            DateTime::Format::ISO8601->parse_datetime($_);
+            my $dt = DateTime::Format::ISO8601->parse_datetime($_);
+            $dt->set_formatter(DateTime::Format::Strptime->new(pattern => "%F"));
+            $dt;
         }
 ;
 

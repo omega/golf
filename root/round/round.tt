@@ -5,23 +5,47 @@
         Course
         <select id="course" name="course">
             [% FOREACH course IN courses.all %]
-            <option>[% course.name %]</option>
+            <option data:size="[% course.size %]">[% course.name %]</option>
             [% END %]
         </select>
     </label>
     <label for="date">
         Date
-        <input id="date" name="date" />
+        <input id="date" name="date" value="[% round.date %]"/>
     </label>
     
-    <fieldset class="checkboxes">
+    <fieldset class="checkboxes players">
         <legend>Players</legend>
         [% FOREACH player IN players.all %]
         <label for="p_[% player.id %]">
-            <input id="p_[% player.id %]" type="checkbox" name="players" value="[% player.id %]" />
+            <input id="p_[% player.id %]" type="checkbox" name="players" value="[% player.id %]" [% IF round.has_player(player.id) %] checked="checked"[% END %] />
             [% player.name %]
         </label>
         [% END %]
+    </fieldset>
+    <fieldset class="scores">
+        <legend>Scores</legend>
+        <table>
+            <thead>
+            <tr>
+                <th>Hole</th>
+                [% FOREACH player IN round.players %]
+                <th id="ph_[% player.id %]">[% player.id %]</th>
+                [% END %]
+            </tr>
+            </thead>
+            <tbody>
+            [% SET hc = 0; 
+               FOREACH hole IN round.course.holes; SET hc = hc +1 %]
+            <tr>
+                <td>[% hc %]</td>
+                [% FOREACH player IN round.players %]
+                <td><input type="text" name="[% hc %]_[% player.id %]" value="[% round.scores.get_player(player.id) %]" /></td>
+                [% END %]
+            </tr>
+            [% END%]
+            </tbody>
+        </table>
     </fieldset>
     <label>
         <button type="submit">Submit</button>

@@ -1,6 +1,9 @@
 use MooseX::Declare;
 
-class Golf::Domain::Round with Golf::Domain::Meta::Extractable {
+class Golf::Domain::Round 
+with Golf::Domain::Meta::Extractable
+with Golf::Domain::Meta::Updateable
+with Golf::Domain::Meta::ID {
 
     use Golf::Domain::Meta::Types qw/PlayerList Date Course/;
     use Digest::SHA1 qw/sha1_hex/;
@@ -19,7 +22,12 @@ class Golf::Domain::Round with Golf::Domain::Meta::Extractable {
 
 =cut
 
-    has 'id'    => (is => 'ro', isa => 'Str', lazy_build => 1);
+    has 'id'    => (
+        traits  => [qw/Extract/],
+        is => 'ro', 
+        isa => 'Str', 
+        lazy_build => 1,
+    );
     
     method _build_id {
         sha1_hex($self->date . "-" 
@@ -28,7 +36,6 @@ class Golf::Domain::Round with Golf::Domain::Meta::Extractable {
     };
     
     has 'date' => (
-        traits => [qw/Extract/],
         is => 'rw', 
         isa => Date,
         coerce => 1,
@@ -44,9 +51,31 @@ class Golf::Domain::Round with Golf::Domain::Meta::Extractable {
     
     has 'players' => (
         metaclass => 'Collection::Array',
-        is => 'ro',
+        is => 'rw',
         coerce => 1,
         isa => PlayerList,
+        provides => {
+            'grep' => 'grep_players',
+        }
+    );
+    method get_player(Str $id) {
+        $self->grep_players(sub { 
+            $_[0]->id eq $id 
+        });
+    }
+    method has_player(Str $id) {
+        !!$self->get_player($id);
+    }
+    
+    method add_hole_scores(HashRef $scores) {
         
-    )
+        # Figure out next hole, 
+        foreach my $k (keys %$scores) {
+            
+        }
+    }
+    
+    method set_hole_scores(HashRef $scores) {
+        
+    }
 }
