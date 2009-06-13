@@ -6,13 +6,16 @@ use MooseX::Types
         Hole HoleArray
         RoundHoleScore RoundHoleScoreArray
         Player PlayerList
+        PlayerRound PlayerRoundList
         Date
+        Score ScoreList
     /
     ]
 ;
 
 use Golf::Domain::Hole;
 use Golf::Domain::Search;
+use Golf::Domain::PlayerRound;
 
 use DateTime::Format::ISO8601;
 use DateTime::Format::Strptime;
@@ -37,7 +40,14 @@ coerce HoleArray,
     
 ;
 
+
 class_type Player, { class => 'Golf::Domain::Player' };
+coerce Player ,
+    from Str,
+        via {
+            Golf::Domain::Search->coerce_player($_);
+        }
+;
 
 subtype PlayerList,
     as ArrayRef[Player]
@@ -62,6 +72,36 @@ coerce PlayerList,
         
 ;
 
+
+class_type PlayerRound, { class => 'Golf::Domain::PlayerRound' };
+
+subtype PlayerRoundList,
+    as ArrayRef[PlayerRound]
+;
+
+coerce PlayerRoundList,
+    from Player,
+        via {
+            [Golf::Domain::PlayerRound->new(player => $_)]
+        },
+    from ArrayRef[Str],
+        via {
+            my @players = map { 
+                Golf::Domain::PlayerRound->new(
+                    player => Golf::Domain::Search->coerce_player($_)
+                );
+            } @$_;
+            \@players;
+        },
+    from Str,
+        via {
+            [ Golf::Domain::PlayerRound->new(
+                player => Golf::Domain::Search->coerce_player($_)
+            ) ]
+        }
+        
+;
+
 class_type Course, { class => 'Golf::Domain::Course' };
 
 coerce Course, 
@@ -82,18 +122,12 @@ coerce Date,
         }
 ;
 
-=pod
 
-class_type RoundHoleScore, { class => 'Golf::Domain::RoundHoleScore' };
+class_type Score, { class => 'Golf::Domain::Score' };
 
-#coerce RoundHoleScore,
-#    from HashRef
-subtype RoundHoleScoreArray,
-    as ArrayRef[RoundHoleScore]
+subtype ScoreList,
+    as ArrayRef[Score]
 ;
-
-=cut
-
 
 1;
 

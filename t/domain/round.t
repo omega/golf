@@ -34,6 +34,11 @@ my $rid;
     });
     
     is(scalar(@{$r->players}), 2);
+    {
+        my $p = $r->get_player('omega');
+        isa_ok($p, "Golf::Domain::PlayerRound");
+        is($p->player->id, "omega");
+    }
     $r->course('Frogner');
     
     is($r->course->name, "Frogner");
@@ -44,5 +49,8 @@ my $rid;
         omega => 3,
         mesh => 5,
     });
+    is($r->_get_player(0)->count_scores, 1);
+    is($r->get_player('omega')->total_score, 3);
+    is($r->get_player('mesh')->total_score, 5);
     
 }

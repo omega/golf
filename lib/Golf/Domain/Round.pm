@@ -5,23 +5,12 @@ with Golf::Domain::Meta::Extractable
 with Golf::Domain::Meta::Updateable
 with Golf::Domain::Meta::ID {
 
-    use Golf::Domain::Meta::Types qw/PlayerList Date Course/;
+    use Golf::Domain::Meta::Types qw/
+        PlayerRoundList Date Course Hole
+        ScoreList
+    /;
     use Digest::SHA1 qw/sha1_hex/;
     
-=pod
-
-    has '_scores' => (
-        is      => 'ro',
-        isa     => 'KiokuDB::Set',
-        required => 0,
-        default => sub { set() },
-        handles => {
-            'scores' => 'members',
-        }
-    );
-
-=cut
-
     has 'id'    => (
         traits  => [qw/Extract/],
         is => 'ro', 
@@ -53,29 +42,41 @@ with Golf::Domain::Meta::ID {
         metaclass => 'Collection::Array',
         is => 'rw',
         coerce => 1,
-        isa => PlayerList,
+        isa => PlayerRoundList,
         provides => {
             'grep' => 'grep_players',
+            'get'  => '_get_player',
         }
     );
     method get_player(Str $id) {
-        $self->grep_players(sub { 
-            $_[0]->id eq $id 
+        my ($p) = $self->grep_players(sub { 
+            $_[0]->player->id eq $id 
         });
+        return $p;
     }
     method has_player(Str $id) {
         !!$self->get_player($id);
     }
-    
+    method get_next_hole() {
+        
+        # Figure out how many holes we have played, add one and
+        # get that hole from the course.
+        $self->course->get_hole($self->_get_player(0)->count_scores);
+        
+    }
     method add_hole_scores(HashRef $scores) {
         
         # Figure out next hole, 
-        foreach my $k (keys %$scores) {
-            
-        }
+        my $hole = $self->get_next_hole;
+        
+        $self->set_hole_scores($hole, $scores);
     }
     
-    method set_hole_scores(HashRef $scores) {
-        
+    method set_hole_scores(Hole $hole, HashRef $scores) {
+        foreach my $k (keys %$scores) {
+            my $p = $self->get_player($k);
+            croak("no player $k") unless $p;
+            
+        }
     }
 }
