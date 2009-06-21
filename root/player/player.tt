@@ -21,7 +21,7 @@
     </label>
     <label for="description">
         Description
-        <div class="spacer"></div>
+        <span class="spacer"></span>
         <textarea id="description" name="description" />[%  c.req.param('description') || player.description %]</textarea>
     </label>
     
