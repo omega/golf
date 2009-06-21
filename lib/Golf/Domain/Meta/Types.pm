@@ -84,6 +84,15 @@ coerce PlayerRoundList,
         via {
             [Golf::Domain::PlayerRound->new(player => $_)]
         },
+    from ArrayRef[Player],
+        via {
+            my @plr = map {
+                Golf::Domain::PlayerRound->new(
+                    player => $_
+                );
+            } @$_;
+            \@plr;
+        },
     from ArrayRef[Str],
         via {
             my @players = map { 
