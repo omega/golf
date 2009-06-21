@@ -82,6 +82,7 @@ form {
         }
         form label .spacer {
             height: 3.5em;
+            display: block;
         }
     form fieldset.checkboxes {
         
@@ -95,4 +96,5 @@ form {
             form fieldset.checkboxes input {
                 left: 17%;
                 top: 6px;
+                width: auto;
             }
