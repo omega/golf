@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 
 use strict;
-use Test::More tests => 7;
+use Test::More tests => 15;
 use t::Test qw(courses players);
 
 my $rid;
@@ -52,5 +52,14 @@ my $rid;
     is($r->_get_player(0)->count_scores, 1);
     is($r->get_player('omega')->total_score, 3);
     is($r->get_player('mesh')->total_score, 5);
+    
+    $r->add_hole_scores({
+        omega => [4, 1],
+        mesh => 3,
+    });
+
+    is($r->_get_player(0)->count_scores, 2);
+    is($r->get_player('omega')->total_score, 7);
+    is($r->get_player('mesh')->total_score, 8);
     
 }

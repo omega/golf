@@ -9,6 +9,8 @@ with Golf::Domain::Meta::ID {
         PlayerRoundList Date Course Hole
         ScoreList
     /;
+    use Golf::Domain::Score;
+    
     use Digest::SHA1 qw/sha1_hex/;
     
     has 'id'    => (
@@ -74,9 +76,19 @@ with Golf::Domain::Meta::ID {
     
     method set_hole_scores(Hole $hole, HashRef $scores) {
         foreach my $k (keys %$scores) {
+            my $s = $scores->{$k};
+            my ($throws, $dropped) = ref($s) ? @$s : ($s, 0);
             my $p = $self->get_player($k);
             croak("no player $k") unless $p;
             
+            # Now we set the score
+            my $score = Golf::Domain::Score->new(
+                hole => $hole,
+                score => $throws,
+                player => $p->player,
+                dropped => $dropped,
+            );
+            $p->add_score($score);
         }
     }
 }

@@ -21,6 +21,7 @@ class Golf::Domain::PlayerRound {
         provides => {
             'push' => 'add_score',
             'get' => 'get_score',
+            'set' => 'set_score',
             'count' => 'count_scores',
             'map' => '_map_scores',
         },
