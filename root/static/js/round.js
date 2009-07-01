@@ -37,7 +37,7 @@ $(document).ready(function() {
         });
     });
     $('#course').change();
-    $('.players input[type="checkbox"]').change(function() {
+    $('.scores .players input[type="checkbox"]').change(function() {
         var pid = $(this).val();
         if (this.checked) {
             // clone the whole row of holes

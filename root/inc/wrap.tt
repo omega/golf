@@ -2,12 +2,14 @@
 <html>
     <head>
         <title>Golf</title>
+        <!-- 
         <script type="text/javascript" src="http://www.google.com/jsapi"></script>
         <script type="text/javascript">
         // Load jQuery
-        google.load("jquery", "1");
-        google.load("jqueryui", "1.7.1");
+        //google.load("jquery", "1");
+        //google.load("jqueryui", "1.7.1");
         </script>
+        -->
         [% c.assets.export %]
     </head>
     <body>
