@@ -40,7 +40,9 @@
             <tr>
                 <td>[% hc %]</td>
                 [% FOREACH player IN round.players %]
-                <td><input type="text" name="[% hc %]_[% player.id %]" value="[% round.scores.get_player(player.id) %]" /></td>
+                <td><input type="text" name="[% hc %]_[% player.player.id %]" value="[% player.get_score(hc).score %]" />
+                    <input type="checkbox" name="[% hc %]_[% player.player.id %]" value="1" [% IF player.get_score(hc).dropped %]checked="checked"[% END %] />
+                    </td>
                 [% END %]
             </tr>
             [% END%]
