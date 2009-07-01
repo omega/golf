@@ -58,7 +58,7 @@ class Golf::Domain extends KiokuX::Model {
     method update(Object $obj, HashRef $args) {
         if ($obj->does('Golf::Domain::Meta::Updateable')) {
             $obj->update($args);
-            $self->directory->update($obj);
+            $self->directory->store($obj);
         } else {
             croak("Cannot update $obj, doesn't do Updateable");
         }
