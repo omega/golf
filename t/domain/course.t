@@ -57,4 +57,16 @@ my $cid;
     my @all = $c->all;
     is(scalar(@all), 1);
 }
+{
+    my $s = $D->new_scope;
+    my $c = $D->find(Course => { name => 'Ekeberg' });
+    
+    $D->update($c, {
+        name => 'Ekeberg', 
+        holes => [
+            4, 3, 3, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3,
+        ],
+    });
+    is($c->get_hole(1)->par, 4);
+}
 done_testing();
