@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 
 use strict;
-use Test::More tests => 10;
+use Test::More 0.88;
 use t::Test;
 use Data::Dump qw/dump/;
 
@@ -42,6 +42,7 @@ my $cid;
     my @holes = $c->holes;
     isa_ok($holes[0], "Golf::Domain::Hole");
     is($holes[3]->par, 4);
+    is($holes[3]->idx, 4);
     
 }
 {
@@ -56,3 +57,4 @@ my $cid;
     my @all = $c->all;
     is(scalar(@all), 1);
 }
+done_testing();
