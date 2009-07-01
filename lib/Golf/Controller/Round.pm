@@ -93,6 +93,30 @@ sub edit : Chained('load') Args(0) PathPart('edit') {
     }
 }
 
+
+sub add_score : Chained('load') Args(0) {
+    my ($self, $c) = @_;
+    
+    # build the hash
+    
+    my @players = grep { /^p_[a-z]+$/ } keys( %{$c->req->params} );
+    
+    my $scores = {};
+    
+    foreach my $p (@players) {
+        my ($id) = ($p =~ m/p_(.*)/);
+        $scores->{$id} = $c->req->params->{$p};
+    }
+    use Data::Dump qw/dump/;
+    $c->log->debug('scores: ' . dump($scores)) if $c->debug;
+    $c->stash->{round}->add_hole_scores($scores);
+    
+    $c->model('Kioku')->model->store($c->stash->{round});
+    
+    $c->res->redirect($c->uri_for_action($self->action_for('show'), $c->req->captures));
+    
+}
+
 =head1 AUTHOR
 
 Andreas Marienborg
