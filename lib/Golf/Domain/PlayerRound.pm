@@ -20,13 +20,16 @@ class Golf::Domain::PlayerRound {
         auto_deref => 1,
         provides => {
             'push' => 'add_score',
-            'get' => 'get_score',
+            'get' => '_get_score',
             'set' => 'set_score',
             'count' => 'count_scores',
             'map' => '_map_scores',
+            'grep' => '_grep_scores',
         },
     );
-    
+    method get_score(Golf::Domain::Hole $hole) {
+        return $self->_get_score($hole->idx - 1);
+    }
     method total_score() {
         my $s;
         $self->_map_scores(sub {

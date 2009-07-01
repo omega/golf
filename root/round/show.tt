@@ -11,23 +11,29 @@
 </ul>
 <h3>Scores</h3>
 [% IF round.get_next_hole %]
-    <h4>Add hole score</h4>
-    <dl>
-        <dt>Par</dt><dd>[% round.get_next_hole.par %]</dd>
-        <dt>idx</dt><dd>[% round.get_next_hole.idx %]</dd>
-    </dl>
-    <form method="POST" action="[% c.uri_for_action(c.action(), c.req.captures, 'add_score') %]">
-        <fieldset class="checkboxes inputs players">
-        [% FOREACH player IN round.players %]
-        <label for="p_[% player.player.id %]">[% player.player.id %]
-            <input type="text" id="p_[% player.player.id %]" 
-            name="p_[% player.player.id %]" />
-            <input type="checkbox" name="p_[% player.player.id %]" value="1" />
-        </label>
-        [% END %]
-        </fieldset>
-        <button type="submit">Add score</button>
-    </form>
+    <div class="columns">
+        <div class="left">
+            <h4>Add hole score</h4>
+            <dl>
+                <dt>Hole</dt><dd>[% round.get_next_hole.idx %]</dd>
+                <dt>Par</dt><dd>[% round.get_next_hole.par %]</dd>
+            </dl>
+        </div>
+        <div class="right">
+            <form method="POST" action="[% c.uri_for_action(c.action(), c.req.captures, 'add_score') %]">
+                <fieldset class="checkboxes inputs players">
+                [% FOREACH player IN round.players %]
+                <label>[% player.player.id %]
+                    <input type="text" id="p_[% player.player.id %]" 
+                    name="p_[% player.player.id %]" />
+                    <input type="checkbox" name="p_[% player.player.id %]" value="1" />
+                </label>
+                [% END %]
+                </fieldset>
+                <button type="submit">Add score</button>
+            </form>
+        </div>
+    </div>
 [% END %]
 <table class="scores">
     <thead>
@@ -39,20 +45,19 @@
     </tr>
     </thead>
     <tbody>
-    [% SET hc = 0; 
-       FOREACH hole IN round.course.holes; SET hc = hc +1 %]
+    [% FOREACH hole IN round.course.holes %]
     <tr>
-        <td>[% hc %] (p[% hole.par %])</td>
-        [% FOREACH player IN round.players %]
-        <td [% IF player.get_score(hc).dropped %] class="drop"[% END %]>[% player.get_score(hc).score %]</td>
+        <td>[% hole.idx %] (p[% hole.par %])</td>
+        [% FOREACH pr IN round.players %]
+        <td [% IF pr.get_score(hole).dropped %] class="drop"[% END %]>[% pr.get_score(hole).score %]</td>
         [% END %]
     </tr>
     [% END%]
     </tbody>
     <tfoot>
         <tr><th>Total</th>
-            [% FOREACH player IN round.players %]
-            <td>[% player.total_score %]</td>
+            [% FOREACH pr IN round.players %]
+            <td>[% pr.total_score %]</td>
             [% END %]
         </tr>
     </tfoot>

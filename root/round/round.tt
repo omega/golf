@@ -29,19 +29,18 @@
             <thead>
             <tr>
                 <th>Hole</th>
-                [% FOREACH player IN round.players %]
-                <th id="ph_[% player.id %]">[% player.id %]</th>
+                [% FOREACH pr IN round.players %]
+                <th id="ph_[% pr.player.id %]">[% pr.player.id %]</th>
                 [% END %]
             </tr>
             </thead>
             <tbody>
-            [% SET hc = 0; 
-               FOREACH hole IN round.course.holes; SET hc = hc +1 %]
+            [% FOREACH hole IN round.course.holes %]
             <tr>
-                <td>[% hc %]</td>
-                [% FOREACH player IN round.players %]
-                <td><input type="text" name="[% hc %]_[% player.player.id %]" value="[% player.get_score(hc).score %]" />
-                    <input type="checkbox" name="[% hc %]_[% player.player.id %]" value="1" [% IF player.get_score(hc).dropped %]checked="checked"[% END %] />
+                <td>[% hole.idx %] (p[% hole.par %])</td>
+                [% FOREACH pr IN round.players %]
+                <td><input type="text" name="[% hole.idx %]_[% pr.player.id %]" value="[% pr.get_score(hole).score %]" />
+                    <input type="checkbox" name="[% hole.idx %]_[% pr.player.id %]" value="1" [% IF pr.get_score(hole).dropped %]checked="checked"[% END %] />
                     </td>
                 [% END %]
             </tr>
