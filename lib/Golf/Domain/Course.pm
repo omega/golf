@@ -21,7 +21,7 @@ with Golf::Domain::Meta::Updateable
         auto_deref => 1,
         provides => {
             'push' => 'add_hole',
-            'get' => 'get_hole',
+            'get' => '_get_hole',
             'count' => 'size',
             'map' => '_map',
             'clear' => '_clear_holes',
@@ -29,6 +29,9 @@ with Golf::Domain::Meta::Updateable
         
         
     );
+    method get_hole(Int $idx) {
+        return $self->_get_hole($idx - 1);
+    }
     method par() {
         my $s = 0;
         $self->_map( sub { $s = $s + $_->par  } );
