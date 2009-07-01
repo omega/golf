@@ -65,7 +65,7 @@ with Golf::Domain::Meta::ID {
         
         # Figure out how many holes we have played, add one and
         # get that hole from the course.
-        $self->course->get_hole($self->_get_player(0)->count_scores);
+        $self->course->get_hole($self->_get_player(0)->count_scores + 1);
         
     }
     method add_hole_scores(HashRef $scores) {
