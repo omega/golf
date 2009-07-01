@@ -42,6 +42,19 @@ ul#menu {
         margin-right: 15px;
     }
 
+div.columns {
+    position: relative;
+}
+    div.left {
+        position: absolute;
+        width: 160px;
+    }
+    div.right {
+        margin-left: 160px;
+    }
+        div.right form fieldset {
+            margin-left: 0px;
+        }
 
 .scores .drop {
     border: 1px solid black;
