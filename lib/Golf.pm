@@ -2,6 +2,7 @@ package Golf;
 
 use strict;
 use warnings;
+use DateTime::Format::Strptime;
 
 use Catalyst::Runtime '5.70';
 
