@@ -1,7 +1,15 @@
 [% PROCESS player/submenu.tt %]
 
-<ul>
+<table>
+    <thead>
+        <tr>
+            <th>Name</th><th></th>
+        </tr>
+    </thead>
 [% FOREACH player IN players.all %]
-    <li>[% player.name %] - <a href="[% c.uri_for(c.action, player.id) %]">Details</a></li>
+    <tr>
+        <td>[% player.name %]</td>
+        <td><a href="[% c.uri_for(c.action, player.id) %]">Details</a></td>
+    </tr>
 [% END %]
 </ul>

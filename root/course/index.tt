@@ -1,7 +1,17 @@
 [% PROCESS course/submenu.tt %]
 
-<ul>
+<table>
+    <thead>
+        <tr>
+            <th>Name</th><th>Par</th><th>Holes</th><th></th>
+        </tr>
+    </thead>
 [% FOREACH course IN courses.all %]
-    <li>[% course.name %], par [% course.par %] - <a href="[% c.uri_for(c.action, course.name) %]">Details</a></li>
+    <tr>
+        <td>[% course.name %]</td>
+        <td class="number">[% course.par %]</td>
+        <td class="number">[% course.size %]</td>
+        <td><a href="[% c.uri_for(c.action, course.name) %]">Details</a></td>
+    </tr>
 [% END %]
 </ul>

@@ -11,11 +11,11 @@ role Golf::Domain::Meta::Updateable {
                 # We have a matching attr!
                 my $attr = $self->meta->find_attribute_by_name($k);
                 if ($attr->has_write_method and $attrs->{$k}) {
-                    warn "setting $k to " . $attrs->{$k} . " from " . $self->$k->name;
+                    warn "setting $k to " . $attrs->{$k} . " from " . $self->$k;
                     my $m = $attr->get_write_method;
                     $self->$k($attrs->{$k});
                     
-                    warn "$k is now " . $self->$k->name;
+                    warn "$k is now " . $self->$k;
                 } elsif (my $m = $self->can("update_$k")) {
                     $self->$m($attrs->{$k});
                 }

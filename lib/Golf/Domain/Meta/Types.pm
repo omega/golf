@@ -30,14 +30,18 @@ subtype HoleArray,
 
 coerce HoleArray,
     from ArrayRef[Int],
-        via { my @holes = map { 
-            Golf::Domain::Hole->new( par => $_ ) 
-        } @$_; \@holes },
+        via { 
+            my $idx = 0;
+            my @holes = map {
+                $idx++;
+                Golf::Domain::Hole->new( par => $_, idx => $idx ) 
+                } @$_; 
+            \@holes 
+        },
     from Int,
         via {
-            [Golf::Domain::Hole->new( par => $_ ) ]
+            [Golf::Domain::Hole->new( par => $_, idx => 1 ) ]
         }
-    
 ;
 
 

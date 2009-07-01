@@ -6,4 +6,9 @@ class Golf::Domain::Hole {
         is => 'rw',
         isa => 'Int',
     );
+    has 'idx' => (
+        traits => [qw/Extract/],
+        is => 'rw',
+        isa => 'Int',
+    );
 }

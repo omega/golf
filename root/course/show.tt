@@ -1,3 +1,13 @@
 [% PROCESS course/submenu.tt %]
 <h2>[% course.name %]</h2>
 <p><a href="[% c.uri_for_action(c.action(), c.req.captures, 'edit') %]">Edit course</a></p>
+<dl>
+    <dt>Par</dt><dd>[% course.par %]</dd>
+    <dt>Holes</dt><dd>[% course.size %]</dd>
+</dl>
+<h3>Pars</h3>
+<dl>
+    [% FOREACH hole IN course.holes %]
+    <dt>#[% hole.idx %]</dt><dd>[% hole.par %]</dd>
+    [% END %]
+</dl>

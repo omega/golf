@@ -15,14 +15,13 @@
         %]
         [%
           SET holes = c.req.param('holes') || course.holes;
-          SET i = 1
         %]
         [% FOREACH hole IN holes %]
-        <label for="hole_[% i %]">
-            <span>Hole #[% i %]</span>
-            <input name="holes" id="hole_[% i %]" type="text" value="[% hole.par || hole %]" />
+        <label for="hole_[% hole.idx %]">
+            <span>Hole #[% hole.idx %]</span>
+            <input name="holes" id="hole_[% hole.idx %]" type="text" value="[% hole.par || hole %]" />
         </label>
-        [% SET i = i + 1; END %]
+        [% END %]
         <label for="new_hole">
             <span>New hole</span>
             <input id="new_hole" type="text"/>

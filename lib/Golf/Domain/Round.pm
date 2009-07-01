@@ -11,6 +11,8 @@ with Golf::Domain::Meta::ID {
     /;
     use Golf::Domain::Score;
     
+    use Carp qw/croak/;
+    
     use Digest::SHA1 qw/sha1_hex/;
     
     has 'id'    => (
