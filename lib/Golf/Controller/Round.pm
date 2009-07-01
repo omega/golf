@@ -87,8 +87,11 @@ sub edit : Chained('load') Args(0) PathPart('edit') {
     
     if ($c->req->method eq 'POST') {
         $c->log->debug('Gonna try to update the damn round :p') if $c->debug;
-        
-        $c->model('Kioku')->model->update($c->stash->{round} => $c->req->params);
+        # this will have to be more manual or based on some method naming 
+        # conventio
+        $c->model('Kioku')->model->update(
+            $c->stash->{round} => $c->req->params
+        );
         
     }
 }
@@ -113,7 +116,9 @@ sub add_score : Chained('load') Args(0) {
     
     $c->model('Kioku')->model->store($c->stash->{round});
     
-    $c->res->redirect($c->uri_for_action($self->action_for('show'), $c->req->captures));
+    $c->res->redirect($c->uri_for_action(
+        $self->action_for('show'), $c->req->captures)
+    );
     
 }
 
