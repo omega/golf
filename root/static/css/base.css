@@ -43,7 +43,36 @@ ul#menu {
     }
 
 
+.scores .drop {
+    border: 1px solid black;
+}
 
+dl {
+    position: relative;
+}
+    dt {
+        position: absolute;
+        width: 50px;
+        text-align: right;
+        padding-right: 10px;
+        border-right: 1px dotted silver;
+    }
+    dd {
+        margin-left: 70px;
+    }
+
+table {
+    border-collapse: collapse;
+}
+    .number {
+        text-align: right;
+    }
+    td, th {
+        padding: 3px 10px;
+    }
+    th {
+        border-bottom: 1px dotted silver;
+    }
 form {
     padding: 10px;
 }
@@ -98,3 +127,13 @@ form {
                 top: 6px;
                 width: auto;
             }
+        form fieldset.checkboxes.inputs label {
+            padding-left: 5%;
+        }
+        form fieldset.checkboxes.inputs input {
+            width: 30%;
+            left: 20%;
+        }
+        form fieldset.checkboxes.inputs input[type="checkbox"] {
+            left: 40%;
+        }
