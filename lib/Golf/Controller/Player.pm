@@ -39,7 +39,7 @@ sub create : Local {
 
         $c->log->debug('POST recieved') if $c->debug;
         my $p = eval { 
-            $c->model('Kioku')->model->create_player($c->req->params);
+            $c->model('Kioku')->model->create(Player => $c->req->params);
         };
         if ($@) {
             $c->stash( err => 'Error: ' . $@);
