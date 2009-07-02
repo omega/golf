@@ -9,7 +9,7 @@ use t::Test;
 {
     # Create a new player
     my $s = $D->new_scope;
-    my $p = $D->create_player({
+    my $p = $D->create( Player => {
         id => 'omega',
         name => 'Andreas Marienborg',
         description => 'Just another perl-hacking discgolfer',
@@ -20,7 +20,7 @@ use t::Test;
     ok($p->check_password('blabla'), "can check the password");
     
     throws_ok {
-        $D->create_player({
+        $D->create( Player => {
             id => 'apejens',
             name => 'ape jens',
             password => 'jens',
@@ -28,7 +28,7 @@ use t::Test;
     } qr/Password and cpassword/, "we throw an error on creating with bad cpw";
 
     throws_ok {
-        $D->create_player({
+        $D->create( Player => {
         });
     } qr/need id column/, "we throw an error on creating with missing id";
     
