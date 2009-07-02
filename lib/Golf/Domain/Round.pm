@@ -26,15 +26,36 @@ with Golf::Domain::Meta::ID {
         $round;
     }
     method update_players(HashRef $args) {
+        use Data::Dump qw/dump/;
         # should take care of removing players that are no longer there
         # and adding new players etc.
-        
+
         # figure out what players we have in $args
+        my $new_players = $args->{players};
+        
+        my @rounds = @{$self->players};
+        foreach my $pr (@rounds) {
+            unless (grep { $pr->player->id eq $_ } @$new_players) {
+                $pr->player->remove_round($self);
+                $pr = ();
+            }
+        }
+        @rounds = grep { ref $_ } @rounds;
+        map { 
+            my $p = Golf::Domain::Search->coerce_player($_);
+            
+            unless ($self->has_player($p->id)) {
+                $p->add_round($self);
+                push(@rounds, Golf::Domain::PlayerRound->new( player => $p ));
+            }
+        } @$new_players;
+        
+        $self->players(\@rounds);
     }
     method remove {
         # Walk the players and REMOVE this round from their rounds
         $self->_map_players(sub {
-            $_->player->add_round($self);
+            $_->player->remove_round($self);
         });
     }
     

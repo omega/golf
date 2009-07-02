@@ -40,6 +40,9 @@ my $rid;
     ok($r->has_player('seth'), "we have seth in this round now");
     ok(!$r->has_player('omega'), "we no longer have omega in this round");
     
+    ok($D->lookup('user:seth')->has_round($r), "seth has this round");
+    ok($D->lookup('user:mesh')->has_round($r), "mesh has this round");
+    ok(!$D->lookup('user:omega')->has_round($r), "omega has not this round");
 }
 
 {
@@ -87,6 +90,11 @@ my $rid;
     is($r->get_player('omega')->total_score, 7);
     is($r->get_player('seth')->total_score, 0);
     is($r->get_player('mesh')->total_score, 8);
+    
+    ok($D->lookup('user:seth')->has_round($r), "seth has this round");
+    ok($D->lookup('user:mesh')->has_round($r), "mesh has this round");
+    ok($D->lookup('user:omega')->has_round($r), "omege has not this round");
+    
 }
 
 done_testing();
