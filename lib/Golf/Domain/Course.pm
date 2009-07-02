@@ -30,6 +30,7 @@ with Golf::Domain::Meta::Updateable
         
     );
     method get_hole(Int $idx) {
+        # XXX: Should probably grep idx == $idx instead
         return $self->_get_hole($idx - 1);
     }
     method par() {
