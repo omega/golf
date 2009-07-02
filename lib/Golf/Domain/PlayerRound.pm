@@ -31,7 +31,7 @@ class Golf::Domain::PlayerRound {
         return $self->_get_score($hole->idx - 1);
     }
     method total_score() {
-        my $s;
+        my $s = 0;
         $self->_map_scores(sub {
             $s += $_->score
         });
