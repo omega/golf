@@ -87,8 +87,8 @@ sub edit : Chained('load') Args(0) PathPart('edit') {
     
     if ($c->req->method eq 'POST') {
         $c->log->debug('Gonna try to update the damn round :p') if $c->debug;
-        # this will have to be more manual or based on some method naming 
-        # conventio
+        # XXX: this will have to be more manual or based on some method naming 
+        # convention
         $c->model('Kioku')->model->update(
             $c->stash->{round} => $c->req->params
         );
