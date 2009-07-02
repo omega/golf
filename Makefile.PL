@@ -4,6 +4,7 @@ use inc::Module::Install;
 
 name 'Golf';
 all_from 'lib/Golf.pm';
+test_requires 'Test::More' => '0.88';
 
 requires 'Catalyst::Runtime' => '5.80002';
 requires 'Catalyst::Plugin::ConfigLoader';
