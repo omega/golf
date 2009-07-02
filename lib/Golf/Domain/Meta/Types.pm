@@ -4,9 +4,9 @@ use MooseX::Types
     -declare => [qw/
         Course
         Hole HoleArray
-        RoundHoleScore RoundHoleScoreArray
         Player PlayerList
         PlayerRound PlayerRoundList
+        Round RoundList
         Date
         Score ScoreList
     /
@@ -44,6 +44,10 @@ coerce HoleArray,
         }
 ;
 
+class_type Round, { class => 'Golf::Domain::Round' };
+subtype RoundList,
+    as ArrayRef[Round]
+;
 
 class_type Player, { class => 'Golf::Domain::Player' };
 coerce Player ,

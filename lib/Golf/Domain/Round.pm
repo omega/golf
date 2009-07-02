@@ -14,6 +14,29 @@ with Golf::Domain::Meta::ID {
     use Carp qw/croak/;
     
     use Digest::SHA1 qw/sha1_hex/;
+
+    method create(HashRef $args) {
+        my $round = __PACKAGE__->new($args);
+        
+        # walk the players and add this round to their rounds
+        $round->_map_players(sub {
+            $_->player->add_round($round);
+        });
+
+        $round;
+    }
+    method update_players(HashRef $args) {
+        # should take care of removing players that are no longer there
+        # and adding new players etc.
+        
+        # figure out what players we have in $args
+    }
+    method remove {
+        # Walk the players and REMOVE this round from their rounds
+        $self->_map_players(sub {
+            $_->player->add_round($self);
+        });
+    }
     
     has 'id'    => (
         traits  => [qw/Extract/],
@@ -50,8 +73,10 @@ with Golf::Domain::Meta::ID {
         provides => {
             'grep' => 'grep_players',
             'get'  => '_get_player',
+            'map'  => '_map_players',
         }
     );
+    
     method get_player(Str $id) {
         my ($p) = $self->grep_players(sub { 
             $_[0]->player->id eq $id 
@@ -61,12 +86,17 @@ with Golf::Domain::Meta::ID {
     method has_player(Str $id) {
         !!$self->get_player($id);
     }
+    
+    method holes_played() {
+        my $max_played = 0;
+        
+        $self->_map_players(sub {
+            $max_played = $_->count_scores if $_->count_scores > $max_played
+        });
+        return $max_played;
+    }
     method get_next_hole() {
-        
-        # Figure out how many holes we have played, add one and
-        # get that hole from the course.
-        $self->course->get_hole($self->_get_player(0)->count_scores + 1);
-        
+        $self->course->get_hole($self->holes_played + 1);
     }
     method add_hole_scores(HashRef $scores) {
         

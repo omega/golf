@@ -18,50 +18,32 @@ class Golf::Domain extends KiokuX::Model {
         default => sub { { } },
     );
     
-    # XXX: Should this really be in the Player-class?
-    method create_player(HashRef $args) {
-        
-        # check password and cpassword
-        croak("need id column") unless $args->{id};
-        if ($args->{password} and $args->{cpassword}
-            and $args->{password} eq $args->{cpassword}
-        ) {
-            delete $args->{cpassword};
-            $args->{password} = crypt_password($args->{password});
-        } else {
-            croak("Password and cpassword does not match, or one is missing");
-        }
-        
-        Class::MOP::load_class("Golf::Domain::Player") 
-            unless Class::MOP::is_class_loaded("Golf::Domain::Player");
-        
-        my $p = Golf::Domain::Player->new($args);
-        $self->insert($p);
-        
-        return $p;
-    }
     method create(Str $class, HashRef $args) {
-
-        if (my $m = $self->can('create_' . lc($class))) {
+        my $full_class = "Golf::Domain::$class";
+        Class::MOP::load_class($full_class) 
+            unless Class::MOP::is_class_loaded($full_class);
+        my $obj;
+        if (my $m = $full_class->can('create') || $self->can('create_' . lc($class))) {
             # We call a specialized method
-            return $m->($self, $args);
+            $obj = $m->($self, $args);
         } else {
-            $class = "Golf::Domain::$class";
-            Class::MOP::load_class($class) 
-                unless Class::MOP::is_class_loaded($class);
-            my $o = $class->new($args);
-            $self->insert($o);
-            return $o;
+            $obj = $full_class->new($args);
         }
-
+        $self->insert($obj);
+        return $obj;
     }
     method update(Object $obj, HashRef $args) {
-        if ($obj->does('Golf::Domain::Meta::Updateable')) {
+        if ($obj->does('Golf::Domain::Meta::Updateable')) 
+        {
             $obj->update($args);
             $self->directory->store($obj);
         } else {
             croak("Cannot update $obj, doesn't do Updateable");
         }
+    }
+    method remove(Object $obj) {
+        $obj->remove if ($obj->can('remove'));
+        $self->directory->delete($obj);
     }
     method find(Str $class, HashRef $query) {
         my $stream = $self->search({

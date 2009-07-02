@@ -14,7 +14,7 @@ role Golf::Domain::Meta::Updateable {
                     my $m = $attr->get_write_method;
                     $self->$k($attrs->{$k});
                 } elsif (my $m = $self->can("update_$k")) {
-                    $self->$m($attrs->{$k});
+                    $self->$m($attrs);
                 }
             }
         }

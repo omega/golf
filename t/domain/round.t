@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 
 use strict;
-use Test::More tests => 15;
+use Test::More 0.88;
 use t::Test qw(courses players);
 
 my $rid;
@@ -18,11 +18,28 @@ my $rid;
     $rid = $r->id;
 }
 {
+    my $s = $D->new_scope;
     my $r = $D->find(Round => { id => $rid });
     is($r->course->name, "Ekeberg");
     is($r->id, $rid);
     ok($r->has_player('omega'), "we have player omega in this round");
     ok(!$r->has_player('absas'), "we don't have player absas in this round");
+    
+    # Lets try to update this round
+    $D->update($r, {
+        course => 'Ekeberg',
+        players => ['seth', 'mesh']
+    });
+}
+{
+    my $s = $D->new_scope;
+    my $r = $D->find(Round => { id => $rid });
+    is($r->course->name, 'Ekeberg');
+    is($r->date, '2009-05-22');
+    ok($r->has_player('mesh'), "we have mesh in this round now");
+    ok($r->has_player('seth'), "we have seth in this round now");
+    ok(!$r->has_player('omega'), "we no longer have omega in this round");
+    
 }
 
 {
@@ -49,7 +66,7 @@ my $rid;
         omega => 3,
         mesh => 5,
     });
-    is($r->_get_player(0)->count_scores, 1);
+    is($r->holes_played, 1);
     is($r->get_player('omega')->total_score, 3);
     is($r->get_player('mesh')->total_score, 5);
     
@@ -58,8 +75,18 @@ my $rid;
         mesh => 3,
     });
 
-    is($r->_get_player(0)->count_scores, 2);
+    is($r->holes_played, 2);
     is($r->get_player('omega')->total_score, 7);
     is($r->get_player('mesh')->total_score, 8);
     
+    $D->update($r, {
+        course => 'Ekeberg',
+        players => ['seth', 'mesh', 'omega']
+    });
+    
+    is($r->get_player('omega')->total_score, 7);
+    is($r->get_player('seth')->total_score, 0);
+    is($r->get_player('mesh')->total_score, 8);
 }
+
+done_testing();
