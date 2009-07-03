@@ -6,7 +6,7 @@
 <h3>Players</h3>
 <ul>
     [% FOREACH player IN round.players %]
-    <li><a href="[% c.uri_for('/player', player.id) %]">[% player.player.name %]</a> ([% player.player.id %])</li>
+    <li><a href="[% c.uri_for('/player', player.player.id) %]">[% player.player.name %]</a> ([% player.player.id %])</li>
     [% END %]
 </ul>
 <h3>Scores</h3>

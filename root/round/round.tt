@@ -1,5 +1,5 @@
 [% PROCESS round/submenu.tt %]
-
+[% IF round.id %]<a href="[% c.uri_for_action(c.controller('Round').action_for('show'), c.req.captures) %]">Details</a>[% END %]
 <form autocomplete="off" action="[% c.uri_for_action(c.action, c.req.captures) %]" method="POST">
     <label for="course">
         Course

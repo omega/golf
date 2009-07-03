@@ -2,6 +2,6 @@
 
 <ul>
 [% FOREACH round IN rounds.all %]
-    <li>[% round.course.name %], [% round.date %] - <a href="[% c.uri_for(c.action, round.id) %]">Details</a></li>
+    <li>[% round.course.name %], [% round.date %] - <a href="[% c.uri_for(c.action, round.id) %]">Details</a> - <a href="[% c.uri_for(c.action, round.id, 'delete') %]">Delete</a></li>
 [% END %]
 </ul>
