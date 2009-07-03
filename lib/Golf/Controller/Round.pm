@@ -79,7 +79,14 @@ sub load : Chained('/') CaptureArgs(1) PathPart('round') {
 sub show : Chained('load') Args(0) PathPart('') {
     
 }
-
+sub delete : Chained('load') Args(0) PathPart('delete') {
+    my ($self, $c) = @_;
+    $c->model('Kioku')->model->remove($c->stash->{round});
+    $c->res->redirect($c->uri_for_action(
+        $self->action_for('index'))
+    );
+    
+}
 sub edit : Chained('load') Args(0) PathPart('edit') {
     my ($self, $c) = @_;
     
