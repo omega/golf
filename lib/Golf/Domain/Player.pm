@@ -53,6 +53,7 @@ with Golf::Domain::Meta::Updateable {
         default => sub { [] },
     );
     method has_round(Golf::Domain::Round $round) {
+        return unless ref($self->rounds);
         return $self->_grep_rounds(sub { $_->id eq $round->id })
     }
     method add_round(Golf::Domain::Round $round) {
@@ -62,6 +63,6 @@ with Golf::Domain::Meta::Updateable {
     method remove_round(Golf::Domain::Round $round) {
         $self->rounds( $self->_grep_rounds( sub {
             $_->id ne $round->id
-        } ) );
+        } ) ) if $self->has_round($round);
     }
 }
