@@ -4,6 +4,8 @@ use strict;
 use warnings;
 use base 'Catalyst::Controller';
 
+use Scalar::Util qw/looks_like_number/;
+
 =head1 NAME
 
 Golf::Controller::Round - Catalyst Controller
@@ -94,11 +96,30 @@ sub edit : Chained('load') Args(0) PathPart('edit') {
     
     if ($c->req->method eq 'POST') {
         $c->log->debug('Gonna try to update the damn round :p') if $c->debug;
-        # XXX: this will have to be more manual or based on some method naming 
-        # convention
-        $c->model('Kioku')->model->update(
-            $c->stash->{round} => $c->req->params
-        );
+        my $round = $c->stash->{round};
+        
+        $round->update($c->req->params);
+        # work trough the post params and set hole scores
+        foreach my $hole (@{ $round->course->holes }) {
+            $c->log->debug('hole #' . $hole->idx) if $c->debug;
+            my $i = $hole->idx;
+            my $scores = {};
+            
+            foreach my $pr (@{ $round->players }) {
+                $c->log->debug('   player ' . $pr->player->id) if $c->debug;
+                my $score = $c->req->params->{$i . "_" . $pr->player->id};
+                
+                $scores->{ $pr->player->id } = $score 
+                    if looks_like_number($score) || ref($score);
+                
+            }
+            
+            $round->set_hole_scores($hole, $scores);
+        }
+        $c->model('Kioku')->model->directory->store($round);
+        $c->res->redirect($c->uri_for_action(
+            $c->action, $c->req->captures
+        ));
         
     }
 }
