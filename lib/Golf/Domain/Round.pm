@@ -26,7 +26,6 @@ with Golf::Domain::Meta::ID {
         $round;
     }
     method update_players(HashRef $args) {
-        use Data::Dump qw/dump/;
         # should take care of removing players that are no longer there
         # and adding new players etc.
 
@@ -49,7 +48,9 @@ with Golf::Domain::Meta::ID {
                 push(@rounds, Golf::Domain::PlayerRound->new( player => $p ));
             }
         } @$new_players;
-        
+        map {
+            $_->player->add_round($self);
+        } @rounds;
         $self->players(\@rounds);
     }
     method remove {
@@ -141,7 +142,7 @@ with Golf::Domain::Meta::ID {
                 player => $p->player,
                 dropped => $dropped,
             );
-            $p->add_score($score);
+            $p->set_score($hole, $score);
         }
     }
 }

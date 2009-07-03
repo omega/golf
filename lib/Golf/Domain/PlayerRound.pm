@@ -2,6 +2,8 @@ use MooseX::Declare;
 
 class Golf::Domain::PlayerRound {
     use MooseX::AttributeHelpers;
+    use Golf::Domain::Hole;
+    use Golf::Domain::Score;
     
     use Golf::Domain::Meta::Types qw/
         ScoreList
@@ -19,14 +21,17 @@ class Golf::Domain::PlayerRound {
         coerce => 1,
         auto_deref => 1,
         provides => {
-            'push' => 'add_score',
+            'push' => '_add_score',
             'get' => '_get_score',
-            'set' => 'set_score',
+            'set' => '_set_score',
             'count' => 'count_scores',
             'map' => '_map_scores',
             'grep' => '_grep_scores',
         },
     );
+    method set_score(Golf::Domain::Hole $hole, Golf::Domain::Score $score) {
+        $self->_set_score($hole->idx - 1, $score);
+    }
     method get_score(Golf::Domain::Hole $hole) {
         return $self->_get_score($hole->idx - 1);
     }
