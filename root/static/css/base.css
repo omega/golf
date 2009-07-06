@@ -59,7 +59,9 @@ div.columns {
 .scores .drop {
     border: 1px solid black;
 }
-
+.fright {
+    float: right;
+}
 dl {
     position: relative;
 }

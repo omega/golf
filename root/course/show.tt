@@ -1,5 +1,9 @@
 [% PROCESS course/submenu.tt %]
 <h2>[% course.name %]</h2>
+<div class="fright">
+    <h3>Stats</h3>
+    <img src="[% c.uri_for_action(c.controller('Course').action_for('chart'), c.req.captures) %]" />
+</div>
 <p><a href="[% c.uri_for_action(c.action(), c.req.captures, 'edit') %]">Edit course</a></p>
 <dl>
     <dt>Par</dt><dd>[% course.par %]</dd>

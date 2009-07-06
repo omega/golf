@@ -74,6 +74,49 @@ sub show : Chained('load') Args(0) PathPart('') {
     
 }
 
+sub chart : Chained('load') Args(0) PathPart('chart') {
+    my ( $self, $c ) = @_;
+    
+    my $rounds = $c->stash->{course}->rounds;
+    
+    my $marker_key;
+    
+    my %players;
+    foreach my $r (@$rounds) {
+        
+        foreach my $p (@{$r->players})  {
+            my $pid = $p->player->id;
+            my $phash = $players{ $pid };
+            
+            unless ($phash) {
+                $phash = { 
+                    name => $pid,
+                    keys => [],
+                    values => [],
+                };
+                $players{ $pid } = $phash;
+            }
+            
+            $marker_key = $r->date->epoch unless $marker_key;
+            
+            push(@{ $phash->{keys} }, $r->date->epoch );
+            push(@{ $phash->{values} }, $p->total_score );
+        }
+    }
+    use Data::Dump qw/dump/;
+    $c->log->debug('data: ' . dump(%players)) if $c->debug;
+    $c->stash(
+        current_view => 'Chart',
+        data => {
+            marker => {
+                key => $marker_key,
+                value => $c->stash->{course}->par,
+            },
+            series => [ values(%players) ]
+        },
+    );
+    
+}
 sub edit : Chained('load') Args(0) PathPart('edit') {
     my ($self, $c) = @_;
     
