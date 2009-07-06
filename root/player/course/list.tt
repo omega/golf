@@ -1,0 +1,15 @@
+[% PROCESS player/submenu.tt %]
+
+<table>
+    <thead>
+        <tr>
+            <th>Name</th><th></th>
+        </tr>
+    </thead>
+[% FOREACH course IN courses %]
+    <tr>
+        <td>[% course.name %]</td>
+        <td><a href="[% c.uri_for(c.controller.action_for('view'), c.req.captures, course.name) %]">Details</a></td>
+    </tr>
+[% END %]
+</ul>

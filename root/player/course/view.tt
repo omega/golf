@@ -1,0 +1,19 @@
+[% PROCESS player/submenu.tt %]
+<img class="chart right" src="[% c.uri_for_action(c.controller('Player::Course').action_for('chart'), c.req.captures) %]" />
+[% player.id %] has played the following rounds on [% course.name %]
+<table>
+    <thead>
+        <tr>
+            <th>Date</th><th>Sum</th><th>Score</th>
+        </tr>
+    </thead>
+    <tbody>
+    [% FOREACH round IN rounds; SET pr = round.get_player(player.id) %]
+        <tr>
+            <td>[% round.date %]</td>
+            <td>[% pr.total_score %]</td>
+            <td>[% pr.total_score - round.course.par %]</td>
+        </tr>
+    [% END %]
+    </tbody>
+</table>

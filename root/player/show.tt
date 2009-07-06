@@ -12,7 +12,7 @@
     [% FOREACH round IN player.rounds; SET pr = round.get_player(player.id) %]
         <tr>
             <td>[% round.date %]</td>
-            <td>[% round.course.name %]</td>
+            <td><a href="[% c.uri_for_action(c.controller('Player::Course').action_for('view'), c.req.captures, round.course.name ) %]">[% round.course.name %]</a></td>
             <td>[% pr.total_score %]</td>
             <td>[% pr.total_score - round.course.par %]</td>
         </tr>
