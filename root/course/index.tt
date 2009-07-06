@@ -3,7 +3,7 @@
 <table>
     <thead>
         <tr>
-            <th>Name</th><th>Par</th><th>Holes</th><th></th>
+            <th>Name</th><th>Par</th><th>Holes</th><th>Rounds</th><th></th>
         </tr>
     </thead>
 [% FOREACH course IN courses.all %]
@@ -11,6 +11,7 @@
         <td>[% course.name %]</td>
         <td class="number">[% course.par %]</td>
         <td class="number">[% course.size %]</td>
+        <td class="number">[% course.number_of_rounds IF course.rounds%]</td>
         <td><a href="[% c.uri_for(c.action, course.name) %]">Details</a></td>
     </tr>
 [% END %]

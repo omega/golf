@@ -1,6 +1,7 @@
 [% PROCESS course/submenu.tt %]
 
 <form autocomplete="off" action="[% c.uri_for_action(c.action, c.req.captures) %]" method="POST">
+    <input type="hidden" name="rounds" value="1" />
     <label for="id">
         Name
         <input type="text" id="name" name="name" value="[% c.req.param('name') || course.name %]" />
