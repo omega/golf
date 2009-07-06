@@ -5,7 +5,7 @@
         Course
         <select id="course" name="course">
             [% FOREACH course IN courses.all %]
-            <option data:size="[% course.size %]">[% course.name %]</option>
+            <option data:size="[% course.size %]"[% IF round.course.name == course.name %] selected="selected"[% END %]>[% course.name %]</option>
             [% END %]
         </select>
     </label>

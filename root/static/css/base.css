@@ -59,6 +59,9 @@ div.columns {
 .scores .drop {
     border: 1px solid black;
 }
+.scores input[type="text"] {
+    width: 20%;
+}
 .fright {
     float: right;
 }
