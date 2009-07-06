@@ -43,6 +43,8 @@ my $rid;
     ok($D->lookup('user:seth')->has_round($r), "seth has this round");
     ok($D->lookup('user:mesh')->has_round($r), "mesh has this round");
     ok(!$D->lookup('user:omega')->has_round($r), "omega has not this round");
+    
+    ok($r->course->has_round($r), "course has round");
 }
 
 {

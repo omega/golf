@@ -49,6 +49,7 @@ with Golf::Domain::Meta::Updateable {
         provides => {
             'push' => '_add_round',
             'grep' => '_grep_rounds',
+            'map'  => '_map_rounds',
         },
         default => sub { [] },
     );
@@ -64,5 +65,21 @@ with Golf::Domain::Meta::Updateable {
         $self->rounds( $self->_grep_rounds( sub {
             $_->id ne $round->id
         } ) ) if $self->has_round($round);
+    }
+    
+    method courses() {
+        my $courses = {};
+        
+        $self->_map_rounds( sub {
+            $courses->{ $_->course->name } = $_->course;
+        });
+        
+        return values(%$courses);
+    }
+    method rounds_by_course_name(Str $name) {
+        my @rounds = $self->_grep_rounds( sub {
+            $_->course->name eq $name
+        });
+        \@rounds;
     }
 }

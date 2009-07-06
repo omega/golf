@@ -2,8 +2,8 @@ use MooseX::Declare;
 
 class Golf::Domain::Round 
 with Golf::Domain::Meta::Extractable
-with Golf::Domain::Meta::Updateable
-with Golf::Domain::Meta::ID {
+with Golf::Domain::Meta::ID
+with Golf::Domain::Meta::Updateable {
 
     use Golf::Domain::Meta::Types qw/
         PlayerRoundList Date Course Hole
@@ -23,12 +23,14 @@ with Golf::Domain::Meta::ID {
             $_->player->add_round($round);
         });
 
+        $round->course->add_round($round);
         $round;
     }
     method update_players(HashRef $args) {
         # should take care of removing players that are no longer there
         # and adding new players etc.
-
+        $self->course->add_round($self);
+        
         # figure out what players we have in $args
         my $new_players = $args->{players};
         
