@@ -37,7 +37,7 @@ $(document).ready(function() {
         });
     });
     $('#course').change();
-    $('.scores .players input[type="checkbox"]').change(function() {
+    $('.players input[type="checkbox"]').change(function() {
         var pid = $(this).val();
         if (this.checked) {
             // clone the whole row of holes
@@ -46,7 +46,10 @@ $(document).ready(function() {
                     // Add a TH with the pid
                     $(this).append( '<th id="ph_' + pid + '">' + pid + '</th>');
                 } else {
-                    $(this).append( '<td><input type="text" name="' + i + '_' + pid + '"/ ></td>');
+                    $(this).append( '<td><input '
+                        + 'tabindex="' + ($('.scores th').size() * 100 + i)
+                        + '" type="text" name="' + i + '_' + pid + '"/ >'
+                        + '<input type="checkbox" value="1" name="' + i + '_' + pid + '" /></td>');
                 }
             });
         } else {

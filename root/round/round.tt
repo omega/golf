@@ -16,7 +16,7 @@
     
     <fieldset class="checkboxes players">
         <legend>Players</legend>
-        [% FOREACH player IN players.all %]
+        [% FOREACH player IN players.all.sort('name') %]
         <label for="p_[% player.id %]">
             <input id="p_[% player.id %]" type="checkbox" name="players" value="[% player.id %]" [% IF round.has_player(player.id) %] checked="checked"[% END %] />
             [% player.name %]
@@ -39,7 +39,7 @@
             <tr>
                 <td>[% hole.idx %] (p[% hole.par %])</td>
                 [% FOREACH pr IN round.players %]
-                <td><input type="text" name="[% hole.idx %]_[% pr.player.id %]" value="[% pr.get_score(hole).score %]" />
+                <td><input tabindex="[% loop.count() * 100 + hole.idx %]" type="text" name="[% hole.idx %]_[% pr.player.id %]" value="[% pr.get_score(hole).score %]" />
                     <input type="checkbox" name="[% hole.idx %]_[% pr.player.id %]" value="1" [% IF pr.get_score(hole).dropped %]checked="checked"[% END %] />
                     </td>
                 [% END %]
