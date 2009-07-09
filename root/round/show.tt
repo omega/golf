@@ -60,5 +60,11 @@
             <td>[% pr.total_score %]</td>
             [% END %]
         </tr>
+        <tr><th>Result</th>
+            [% FOREACH pr IN round.players %]
+            <td>[% pr.total_score - round.course.par %]</td>
+            [% END %]
+        </tr>
+            
     </tfoot>
 </table>
