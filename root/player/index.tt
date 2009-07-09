@@ -6,7 +6,7 @@
             <th>Name</th><th></th>
         </tr>
     </thead>
-[% FOREACH player IN players.all %]
+[% FOREACH player IN players.all.sort('name') %]
     <tr>
         <td>[% player.name %]</td>
         <td><a href="[% c.uri_for(c.action, player.id) %]">Details</a></td>
