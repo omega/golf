@@ -49,7 +49,7 @@
         </table>
     </fieldset>
     <label>
-        <button type="submit">Submit</button>
+        <button tabindex="10000" type="submit">Submit</button>
     </label>
     
 </form>

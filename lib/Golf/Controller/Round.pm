@@ -61,6 +61,10 @@ sub create : Local {
             $c->log->debug('Something went wrong with creating: ' . $@) 
                 if $c->debug;
         } else {
+            
+            
+            $c->forward('handle_scores', [$p]);
+            
             $c->flash( msg => 'Round created' );
             $c->res->redirect($c->uri_for('/round', $p->id));
             
@@ -99,24 +103,8 @@ sub edit : Chained('load') Args(0) PathPart('edit') {
         my $round = $c->stash->{round};
         
         $round->update($c->req->params);
-        # work trough the post params and set hole scores
-        foreach my $hole (@{ $round->course->holes }) {
-            $c->log->debug('hole #' . $hole->idx) if $c->debug;
-            my $i = $hole->idx;
-            my $scores = {};
-            
-            foreach my $pr (@{ $round->players }) {
-                $c->log->debug('   player ' . $pr->player->id) if $c->debug;
-                my $score = $c->req->params->{$i . "_" . $pr->player->id};
-                
-                $scores->{ $pr->player->id } = $score 
-                    if looks_like_number($score) || ref($score);
-                
-            }
-            
-            $round->set_hole_scores($hole, $scores);
-        }
-        $c->model('Kioku')->model->directory->store($round);
+        
+        $c->forward('handle_scores', [$round]);
         $c->res->redirect($c->uri_for_action(
             $c->action, $c->req->captures
         ));
@@ -124,6 +112,31 @@ sub edit : Chained('load') Args(0) PathPart('edit') {
     }
 }
 
+
+sub handle_scores : Private {
+    my ( $self, $c, $round ) = @_;
+    
+    # work trough the post params and set hole scores
+    foreach my $hole (@{ $round->course->holes }) {
+        $c->log->debug('hole #' . $hole->idx) if $c->debug;
+        my $i = $hole->idx;
+        my $scores = {};
+        
+        foreach my $pr (@{ $round->players }) {
+            $c->log->debug('   player ' . $pr->player->id) if $c->debug;
+            my $score = $c->req->params->{$i . "_" . $pr->player->id};
+            
+            $scores->{ $pr->player->id } = $score 
+                if looks_like_number($score) || ref($score);
+            
+        }
+        
+        $round->set_hole_scores($hole, $scores);
+    }
+    
+    $c->model('Kioku')->model->directory->store($round);
+    
+}
 
 sub add_score : Chained('load') Args(0) {
     my ($self, $c) = @_;
