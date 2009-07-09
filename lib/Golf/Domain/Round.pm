@@ -16,6 +16,21 @@ with Golf::Domain::Meta::Updateable {
     use Digest::SHA1 qw/sha1_hex/;
 
     method create(HashRef $args) {
+        unless (ref($args->{course})) {
+            $args->{course} = Golf::Domain::Search->coerce_course($args->{course});
+        }
+        
+        unless (ref($args->{players} eq 'ARRAY')) {
+            my $ps = $args->{players};
+            $ps = [$ps] unless ref($ps);
+            map {
+                $_ = Golf::Domain::PlayerRound->new(
+                    player => Golf::Domain::Search->coerce_player($_)
+                );
+            } @$ps;
+            
+            $args->{players} = $ps;
+        }
         my $round = __PACKAGE__->new($args);
         
         # walk the players and add this round to their rounds
@@ -24,6 +39,7 @@ with Golf::Domain::Meta::Updateable {
         });
 
         $round->course->add_round($round);
+        warn "course name: " . $round->course()->name;
         $round;
     }
     method update_players(HashRef $args) {
@@ -86,13 +102,12 @@ with Golf::Domain::Meta::Updateable {
         is      => 'rw',
         isa     => Course,
         required => 1,
-        coerce => 1,
+        weak_ref => 1,
     );
     
     has 'players' => (
         metaclass => 'Collection::Array',
         is => 'rw',
-        coerce => 1,
         isa => PlayerRoundList,
         provides => {
             'grep' => 'grep_players',

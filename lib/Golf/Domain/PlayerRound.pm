@@ -9,7 +9,11 @@ class Golf::Domain::PlayerRound {
         ScoreList
     /;
     
-    has 'player' => (isa => 'Golf::Domain::Player', is => 'ro', coerce => 1);
+    has 'player' => (
+        isa => 'Golf::Domain::Player', 
+        is => 'ro', 
+        weak_ref => 1,
+    );
     
     has 'scores' => (
         metaclass => 'Collection::Array',

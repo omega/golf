@@ -29,7 +29,13 @@ class Golf::Domain extends KiokuX::Model {
         } else {
             $obj = $full_class->new($args);
         }
-        $self->insert($obj);
+        if ($obj->isa('Golf::Domain::Round')) {
+            warn "   round: " . $obj->course->name;
+        }
+        $self->store($obj);
+        if ($obj->isa('Golf::Domain::Round')) {
+            warn "   round: " . $obj->course->name;
+        }
         return $obj;
     }
     method update(Object $obj, HashRef $args) {
