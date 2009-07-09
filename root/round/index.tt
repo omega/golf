@@ -1,7 +1,7 @@
 [% PROCESS round/submenu.tt %]
 
 <ul>
-[% FOREACH round IN rounds.all %]
+[% FOREACH round IN rounds.all.sort('date').reverse %]
     <li>[% round.course.name %], [% round.date %] - <a href="[% c.uri_for(c.action, round.id) %]">Details</a> - <a href="[% c.uri_for(c.action, round.id, 'delete') %]">Delete</a></li>
 [% END %]
 </ul>
