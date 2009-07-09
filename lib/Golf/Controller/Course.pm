@@ -84,7 +84,6 @@ sub chart : Chained('load') Args(0) PathPart('chart') {
         $ignore ? ($ignore) : ())
         );
     $c->log->debug('ignore: ' . join(", ", @ignore)) if $c->debug;
-    my $marker_key = 0;
     
     my $players = {};
     foreach my $r (@$rounds) {
@@ -139,7 +138,6 @@ sub chart : Chained('load') Args(0) PathPart('chart') {
                 height => 400,
             },
             marker => {
-                key => $marker_key,
                 value => $c->stash->{course}->par,
             },
             serie_type => 'Series::Size',
