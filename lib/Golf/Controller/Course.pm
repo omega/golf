@@ -79,43 +79,75 @@ sub chart : Chained('load') Args(0) PathPart('chart') {
     
     my $rounds = $c->stash->{course}->rounds;
     
-    my $marker_key;
+    my $ignore = $c->req->params->{ignore};
+    my @ignore = (ref $ignore ? @$ignore : (
+        $ignore ? ($ignore) : ())
+        );
+    $c->log->debug('ignore: ' . join(", ", @ignore)) if $c->debug;
+    my $marker_key = 0;
     
-    my %players;
+    my $players = {};
     foreach my $r (@$rounds) {
         
         foreach my $p (@{$r->players})  {
             my $pid = $p->player->id;
-            my $phash = $players{ $pid };
-            
-            unless ($phash) {
-                $phash = { 
-                    name => $pid,
-                    keys => [],
-                    values => [],
-                };
-                $players{ $pid } = $phash;
+            if (scalar(@ignore) and grep { $pid eq $_ } @ignore) {
+                $c->log->debug('ignoring ' . $pid) if $c->debug;
+                next;
             }
-            
-            $marker_key = $r->date->epoch unless $marker_key;
-            
-            push(@{ $phash->{keys} }, $r->date->epoch );
-            push(@{ $phash->{values} }, $p->total_score );
+            $players->{$pid}->{n} = $pid;
+            $players->{$pid}->{k} = scalar(keys(%$players)) 
+                unless $players->{$pid}->{k};
+            $players->{$pid}->{v}->{$p->total_score}++;
         }
     }
     use Data::Dump qw/dump/;
-    $c->log->debug('data: ' . dump(%players)) if $c->debug;
+    $c->log->debug('data: ' . dump($players)) if $c->debug;
+
+    # rebuild $players into series
+    my @series;
+    my $ticks = {
+        values => [],
+        labels => [],
+    };
+    foreach my $p (values(%$players)) {
+        my $s = { 
+            name => $p->{n},
+            keys => [],
+            values => [],
+            sizes => [],
+        };
+        my $k = $p->{k};
+        
+        push(@{ $ticks->{values} }, $k);
+        push(@{ $ticks->{labels} }, $p->{n});
+        
+        
+        foreach my $v (keys( %{ $p->{v} }) ) {
+            my $n = $p->{v}->{$v};
+            push(@{ $s->{keys} }, $k);
+            push(@{ $s->{values} }, $v);
+            push(@{ $s->{sizes} }, $n / 2);
+        }
+        
+        push(@series, $s);
+    }
     $c->stash(
         current_view => 'Chart',
         data => {
+            options => {
+                height => 400,
+            },
             marker => {
                 key => $marker_key,
                 value => $c->stash->{course}->par,
             },
-            series => [ values(%players) ]
+            serie_type => 'Series::Size',
+            series => [ @series ],
+            ticks => $ticks,
         },
     );
-    
+
 }
 sub edit : Chained('load') Args(0) PathPart('edit') {
     my ($self, $c) = @_;
