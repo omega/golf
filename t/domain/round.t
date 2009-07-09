@@ -5,7 +5,29 @@ use Test::More 0.88;
 use t::Test qw(courses players);
 
 my $rid;
-
+{
+    my $course = Golf::Domain::Course->new(
+        name => 'Ekeberg2',
+        holes => [3,3,3,3,3,3,3],
+    );
+    my $p = Golf::Domain::Player->new(id => 'omeg', password => 'a');
+    my $pr = Golf::Domain::PlayerRound->new(player => $p);
+    my $round = Golf::Domain::Round->new(
+        players => [$pr],
+        course  => $course,
+        date    => '2009-05-22',
+    );
+    is($round->course->name, "Ekeberg2");
+    $rid = $round->id;
+    
+    my $s = $D->new_scope;
+    $D->store($round);
+}
+{
+    my $s = $D->new_scope;
+    my $round = $D->lookup($rid);
+    is($round->course->name, "Ekeberg2");
+}
 {
     my $s = $D->new_scope;
     my $r = $D->create(Round => {
@@ -13,6 +35,8 @@ my $rid;
         course => 'Ekeberg',
         date => '2009-05-22',
     });
+    
+    is($r->course->name, "Ekeberg");
     
     isa_ok($r, "Golf::Domain::Round");
     $rid = $r->id;
