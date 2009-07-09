@@ -42,6 +42,7 @@ sub load : Chained('/player/load') CaptureArgs(1) PathPart('course') {
 }
 
 sub view : Chained('load') Args(0) PathPart('') {
+    my ( $self, $c ) = @_;
 }
 
 sub chart : Chained('load') Args(0) PathPart('chart') {
@@ -54,12 +55,20 @@ sub chart : Chained('load') Args(0) PathPart('chart') {
         push(@keys, $r->date->epoch);
         push(@values, $r->get_player($c->stash->{player}->id)->total_score);
     }
-    $c->log->debug('keys: ' . join(', ', @keys)) if $c->debug;
-    $c->log->debug('vals: ' . join(', ', @values)) if $c->debug;
-
     $c->stash(
         current_view => 'Chart',
         data => {
+            options => { 
+                format => 'png'
+            },
+            axis => {
+                domain => {
+                    type => 'DateTime',
+                    args => {
+                        format => '%d. %b',
+                    }
+                }
+            },
             marker => {
                 key => $keys[0],
                 value => $c->stash->{course}->par,
