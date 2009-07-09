@@ -53,14 +53,19 @@ sub process {
         ));
     }
 
-    if (my $marker = $D->{marker}) {
-        my $mark = Chart::Clicker::Data::Marker->new(
-            color   => Graphics::Color::RGB->new,
-            brush  => Graphics::Primitive::Brush->new,
-            %{ $marker },
-         );
-        
-        $context->add_marker($mark);
+    if (my $markers = $D->{marker}) {
+        my @markers = (ref($markers) eq 'ARRAY' ? @$markers : ($markers));
+        foreach my $marker (@markers) {
+            $c->log->debug('marker: ' . $marker) if $c->debug;
+            my $mark = Chart::Clicker::Data::Marker->new(
+                color   => Graphics::Color::RGB->new(red => 0.95, green => 0.94, blue => 0.0),
+                brush  => Graphics::Primitive::Brush->new({
+                    width => 3,
+                }),
+                %{ $marker },
+             );
+            $context->add_marker($mark);
+        }
     }
     if (my $t = $D->{ticks}) {
         $context->domain_axis->tick_values($t->{values});

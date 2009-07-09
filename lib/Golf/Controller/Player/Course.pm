@@ -69,10 +69,21 @@ sub chart : Chained('load') Args(0) PathPart('chart') {
                     }
                 }
             },
-            marker => {
-                key => $keys[0],
-                value => $c->stash->{course}->par,
-            },
+            marker => [
+                {
+                    value => $c->stash->{course}->par,
+                },
+                {
+                    key => DateTime->new(year => 2007)->epoch,
+                },
+                {
+                    key => DateTime->new(year => 2008)->epoch,
+                },
+                {
+                    key => DateTime->new(year => 2009)->epoch,
+                },
+            
+            ],
             series => [
                 {
                     keys => \@keys,
