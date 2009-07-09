@@ -44,7 +44,6 @@ with Golf::Domain::Meta::Updateable {
     has 'rounds' => (
         metaclass => 'Collection::Array',
         is => 'rw',
-        coerce => 1,
         isa => RoundList,
         provides => {
             'push' => '_add_round',
