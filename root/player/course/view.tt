@@ -1,5 +1,5 @@
 [% PROCESS player/submenu.tt %]
-<img class="chart right" src="[% c.uri_for_action(c.controller('Player::Course').action_for('chart'), c.req.captures) %]" />
+<img class="chart fright" src="[% c.uri_for_action(c.controller.action_for('chart'), c.req.captures) %]" />
 [% player.id %] has played the following rounds on [% course.name %]
 <table>
     <thead>
