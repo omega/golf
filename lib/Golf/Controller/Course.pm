@@ -145,6 +145,10 @@ sub chart : Chained('load') Args(0) PathPart('chart') {
             serie_type => 'Series::Size',
             series => [ @series ],
             ticks => $ticks,
+            
+            chart => {
+                type => 'Bubble',
+            },
         },
     );
 
