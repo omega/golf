@@ -109,6 +109,7 @@ with Golf::Domain::Meta::Updateable {
         metaclass => 'Collection::Array',
         is => 'rw',
         isa => PlayerRoundList,
+        coerce => 1,
         provides => {
             'grep' => 'grep_players',
             'get'  => '_get_player',

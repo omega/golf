@@ -22,8 +22,6 @@ class Golf::Domain::PlayerRound {
         isa => 'ArrayRef',
         is => 'rw',
         default => sub { [] },
-        coerce => 1,
-        auto_deref => 1,
         provides => {
             'push' => '_add_score',
             'get' => '_get_score',
