@@ -69,4 +69,3 @@ my $cid;
     });
     is($c->get_hole(1)->par, 4);
 }
-done_testing();

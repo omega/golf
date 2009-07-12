@@ -122,5 +122,3 @@ my $rid;
     ok($D->lookup('user:omega')->has_round($r), "omege has not this round");
     
 }
-
-done_testing();

@@ -93,5 +93,9 @@ sub END {
     
     File::Path::rmtree('t/db');
     
+    unless(main::is_deeply( [ $D->live_objects->live_objects ], [ ], "no live objects" )) {
+        main::diag(" Live objects: " . join(", ", $D->live_objects->live_objects));
+    }
+    main::done_testing();
 }
 1;
