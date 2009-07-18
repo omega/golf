@@ -6,8 +6,9 @@ with Golf::Domain::Meta::Updateable
 {
     use MooseX::AttributeHelpers;
     use Golf::Domain::Round;
+    use KiokuDB::Util qw/set/;
     
-    use Golf::Domain::Meta::Types qw/HoleArray RoundList/;
+    use Golf::Domain::Meta::Types qw/HoleSet RoundSet/;
     has 'name' => (
         is      => 'rw',
         traits => [qw/Extract/],
@@ -15,61 +16,39 @@ with Golf::Domain::Meta::Updateable
     );
 
     has 'holes' => (
-        metaclass => 'Collection::Array',
+#        does => 'KiokuDB::Set',
+        isa => HoleSet,
         is => 'rw',
-        isa => HoleArray,
-        default => sub { [] },
         coerce => 1,
-        auto_deref => 1,
-        provides => {
-            'push' => 'add_hole',
-            'get' => '_get_hole',
-            'count' => 'size',
-            'map' => '_map',
-            'clear' => '_clear_holes',
-        },
-        
-        
-    );
-    method get_hole(Int $idx) {
-        # XXX: Should probably grep idx == $idx instead
-        return $self->_get_hole($idx - 1);
-    }
-    method update_rounds(HashRef $args) {
-        $self->{rounds} = [] unless $self->rounds;
-    }
-    has 'rounds' => (
-        metaclass => 'Collection::Array',
-        is => 'rw',
-        isa => RoundList,
-        provides => {
-            'push' => '_add_round',
-            'grep' => '_grep_rounds',
-            'map'  => '_map_rounds',
-            'count' => 'number_of_rounds',
-        },
-        default => sub { [] },
+        default => sub { set() },
+        handles => {
+            'size' => 'size',
+        }
     );
     
-    method has_round(Golf::Domain::Round $round) {
-        return unless ref($self->rounds);
-        return $self->_grep_rounds(sub { $_->id eq $round->id })
+    method get_hole(Int $idx) {
+        # XXX: Should probably grep idx == $idx instead
+        
+        my ($hole) = grep { $_->idx == $idx } $self->holes->members;
+        return $hole;
     }
-    method add_round(Golf::Domain::Round $round) {
-        $self->{rounds} = [] unless $self->rounds;
-        $self->_add_round($round) 
-            unless $self->has_round($round);
-    }
-    method remove_round(Golf::Domain::Round $round) {
-        $self->rounds( $self->_grep_rounds( sub {
-            $_->id ne $round->id
-        } ) ) if $self->has_round($round);
-    }
+    has 'rounds' => (
+        isa => RoundSet,
+        is => 'rw',
+        default => sub { set() },
+        handles => {
+            'has_round' => 'has',
+            'add_round' => 'insert',
+            'remove_round' => 'remove',
+            
+        }
+    );
 
     method par() {
         my $s = 0;
-        $self->_map( sub { $s = $s + $_->par  } );
-        
+        map { 
+            $s = $s + $_->par;
+        } $self->holes->members;
         return $s;
     }
 }

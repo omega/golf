@@ -7,8 +7,10 @@ with Golf::Domain::Meta::Updateable {
     use KiokuX::User::Util qw/crypt_password/;
     use Carp qw/croak/;
     use Golf::Domain::Round;
+    use KiokuDB::Util qw/set/;
+    
     use Golf::Domain::Meta::Types qw/
-        RoundList Round
+        RoundSet
     /;
     
     method create(HashRef $args) {
@@ -42,30 +44,28 @@ with Golf::Domain::Meta::Updateable {
     );
     
     has 'rounds' => (
-        metaclass => 'Collection::Array',
+        isa => RoundSet,
         is => 'rw',
-        isa => RoundList,
-        provides => {
-            'push' => '_add_round',
-            'grep' => '_grep_rounds',
-            'map'  => '_map_rounds',
-        },
-        default => sub { [] },
+        default => sub { set() },
+        handles => {
+            'has_round' => 'member',
+            'add_round' => 'insert',
+            'remove_round' => 'remove',
+        }
     );
-    method has_round(Golf::Domain::Round $round) {
-        return unless ref($self->rounds);
-        return $self->_grep_rounds(sub { $_->id eq $round->id })
-    }
-    method add_round(Golf::Domain::Round $round) {
-        $self->_add_round($round) 
-            unless $self->has_round($round);
-    }
+=pod
     method remove_round(Golf::Domain::Round $round) {
-        $self->rounds( $self->_grep_rounds( sub {
-            $_->id ne $round->id
-        } ) ) if $self->has_round($round);
+        my ($r) = grep {
+            $_->id eq $round->id
+        } $self->rounds->members;
+        my $c = $self->rounds->remove($r);
+        
+        warn "   - removed $c rounds";
+        
+        warn "     rounds: " . join(", ",  map { $_->id } $self->rounds->members );
+        
     }
-    
+=cut
     method courses() {
         my $courses = {};
         

@@ -3,15 +3,18 @@ package Golf::Domain::Meta::Types;
 use MooseX::Types
     -declare => [qw/
         Course
-        Hole HoleArray
+        Hole HoleSet
         Player PlayerList
-        PlayerRound PlayerRoundList
-        Round RoundList
+        PlayerRound PlayerRoundSet
+        Round RoundSet
         Date
-        Score ScoreList
+        Score ScoreSet
     /
     ]
 ;
+
+use KiokuDB::Util qw/set/;
+use KiokuDB::Set;
 
 use Golf::Domain::Hole;
 use Golf::Domain::Search;
@@ -20,34 +23,32 @@ use Golf::Domain::PlayerRound;
 use DateTime::Format::ISO8601;
 use DateTime::Format::Strptime;
 
-use MooseX::Types::Moose qw(ArrayRef Int Str);
+use MooseX::Types::Moose qw(ArrayRef Int Str Object);
 use Moose::Util::TypeConstraints;
 
-class_type Hole, { class => 'Golf::Domain::Hole' };
-subtype HoleArray,
-    as ArrayRef[Hole]
-;
+subtype HoleSet, as 'KiokuDB::Set';
 
-coerce HoleArray,
+coerce HoleSet,
     from ArrayRef[Int],
-        via { 
+        via {
             my $idx = 0;
             my @holes = map {
                 $idx++;
                 Golf::Domain::Hole->new( par => $_, idx => $idx ) 
-                } @$_; 
-            \@holes 
+            } @$_; 
+            set(@holes);
         },
     from Int,
         via {
-            [Golf::Domain::Hole->new( par => $_, idx => 1 ) ]
+            set(Golf::Domain::Hole->new( par => $_, idx => 1 ));
         }
 ;
 
+class_type Hole, { class => 'Golf::Domain::Hole' };
+
 class_type Round, { class => 'Golf::Domain::Round' };
-subtype RoundList,
-    as ArrayRef[Round]
-;
+
+subtype RoundSet, as 'KiokuDB::Set';
 
 class_type Player, { class => 'Golf::Domain::Player' };
 coerce Player ,
@@ -83,38 +84,39 @@ coerce PlayerList,
 
 class_type PlayerRound, { class => 'Golf::Domain::PlayerRound' };
 
-subtype PlayerRoundList,
-    as ArrayRef[PlayerRound]
-;
 
-coerce PlayerRoundList,
+subtype PlayerRoundSet, as 'KiokuDB::Set';
+
+coerce PlayerRoundSet,
     from Player,
         via {
-            [Golf::Domain::PlayerRound->new(player => $_)]
+            set(Golf::Domain::PlayerRound->new(player => $_));
         },
     from ArrayRef[Player],
         via {
-            my @plr = map {
+            set(map {
                 Golf::Domain::PlayerRound->new(
                     player => $_
                 );
-            } @$_;
-            \@plr;
+            } @$_);
         },
     from ArrayRef[Str],
         via {
-            my @players = map { 
+            set(map { 
                 Golf::Domain::PlayerRound->new(
                     player => Golf::Domain::Search->coerce_player($_)
                 );
-            } @$_;
-            \@players;
+            } @$_);
+        },
+    from ArrayRef[PlayerRound],
+        via {
+            set(@$_);
         },
     from Str,
         via {
-            [ Golf::Domain::PlayerRound->new(
+            set(Golf::Domain::PlayerRound->new(
                 player => Golf::Domain::Search->coerce_player($_)
-            ) ]
+            ));
         }
         
 ;
@@ -142,9 +144,7 @@ coerce Date,
 
 class_type Score, { class => 'Golf::Domain::Score' };
 
-subtype ScoreList,
-    as ArrayRef[Score]
-;
+subtype ScoreSet, as 'KiokuDB::Set';
 
 1;
 

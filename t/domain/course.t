@@ -39,10 +39,10 @@ my $cid;
     
     # Check the damn holes?
     
-    my @holes = $c->holes;
+    my @holes = $c->holes->members;
     isa_ok($holes[0], "Golf::Domain::Hole");
-    is($holes[3]->par, 4);
-    is($holes[3]->idx, 4);
+    is($c->get_hole(4)->par, 4);
+    is($c->get_hole(4)->idx, 4);
     
 }
 {

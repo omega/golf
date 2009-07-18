@@ -79,7 +79,7 @@ my $rid;
         date => '2009-05-23',
     });
     
-    is(scalar(@{$r->players}), 2);
+    is($r->players->size, 2);
     {
         my $p = $r->get_player('omega');
         isa_ok($p, "Golf::Domain::PlayerRound");
@@ -119,6 +119,6 @@ my $rid;
     
     ok($D->lookup('user:seth')->has_round($r), "seth has this round");
     ok($D->lookup('user:mesh')->has_round($r), "mesh has this round");
-    ok($D->lookup('user:omega')->has_round($r), "omege has not this round");
+    ok($D->lookup('user:omega')->has_round($r), "omega has this round");
     
 }

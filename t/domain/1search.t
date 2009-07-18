@@ -19,5 +19,8 @@ for my $name (qw/Frogner Ekeberg Muselunden/) {
 
     isa_ok($c, "Golf::Domain::Course");
     is($c->name, $name);
-    
+    my @holes = $c->holes->members;
+    map {
+        isa_ok($_, "Golf::Domain::Hole");
+    } @holes;
 }

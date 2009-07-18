@@ -6,9 +6,12 @@ with Golf::Domain::Meta::ID
 with Golf::Domain::Meta::Updateable {
 
     use Golf::Domain::Meta::Types qw/
-        PlayerRoundList Date Course Hole
-        ScoreList
+        PlayerRoundSet Date Course Hole
+        
     /;
+    
+    use KiokuDB::Util qw/set/;
+    
     use Golf::Domain::Score;
     
     use Carp qw/croak/;
@@ -34,12 +37,12 @@ with Golf::Domain::Meta::Updateable {
         my $round = __PACKAGE__->new($args);
         
         # walk the players and add this round to their rounds
-        $round->_map_players(sub {
+ 
+        map {
             $_->player->add_round($round);
-        });
+        } $round->players->members;
 
         $round->course->add_round($round);
-        warn "course name: " . $round->course()->name;
         $round;
     }
     method update_players(HashRef $args) {
@@ -50,7 +53,7 @@ with Golf::Domain::Meta::Updateable {
         # figure out what players we have in $args
         my $new_players = $args->{players};
         
-        my @rounds = @{$self->players};
+        my @rounds = $self->players->members;
         foreach my $pr (@rounds) {
             unless (grep { $pr->player->id eq $_ } @$new_players) {
                 $pr->player->remove_round($self);
@@ -73,9 +76,9 @@ with Golf::Domain::Meta::Updateable {
     }
     method remove {
         # Walk the players and REMOVE this round from their rounds
-        $self->_map_players(sub {
+        map {
             $_->player->remove_round($self);
-        });
+        } $self->players->members;
     }
     
     has 'id'    => (
@@ -102,25 +105,19 @@ with Golf::Domain::Meta::Updateable {
         is      => 'rw',
         isa     => Course,
         required => 1,
-        weak_ref => 1,
+        coerce => 1,
     );
     
     has 'players' => (
-        metaclass => 'Collection::Array',
-        is => 'rw',
-        isa => PlayerRoundList,
+        isa => PlayerRoundSet,
         coerce => 1,
-        provides => {
-            'grep' => 'grep_players',
-            'get'  => '_get_player',
-            'map'  => '_map_players',
-        }
+        is => 'rw',
     );
     
     method get_player(Str $id) {
-        my ($p) = $self->grep_players(sub { 
-            $_[0]->player->id eq $id 
-        });
+        my ($p) = grep { 
+            $_->player->id eq $id 
+        } $self->players->members;
         return $p;
     }
     method has_player(Str $id) {
@@ -130,9 +127,9 @@ with Golf::Domain::Meta::Updateable {
     method holes_played() {
         my $max_played = 0;
         
-        $self->_map_players(sub {
+        map {
             $max_played = $_->count_scores if $_->count_scores > $max_played
-        });
+        } $self->players->members;
         return $max_played;
     }
     method get_next_hole() {
@@ -154,13 +151,18 @@ with Golf::Domain::Meta::Updateable {
             croak("no player $k") unless $p;
             
             # Now we set the score
-            my $score = Golf::Domain::Score->new(
-                hole => $hole,
-                score => $throws,
-                player => $p->player,
-                dropped => $dropped,
-            );
-            $p->set_score($hole, $score);
+            if (my $score = $p->get_score($hole)) {
+                $score->score($throws);
+                $score->dropped($dropped);
+            } else {
+                my $score = Golf::Domain::Score->new(
+                    hole => $hole,
+                    score => $throws,
+                    player => $p->player,
+                    dropped => $dropped,
+                );
+                $p->add_score($score);
+            }
         }
     }
 }

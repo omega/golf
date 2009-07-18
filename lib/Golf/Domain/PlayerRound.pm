@@ -4,9 +4,10 @@ class Golf::Domain::PlayerRound {
     use MooseX::AttributeHelpers;
     use Golf::Domain::Hole;
     use Golf::Domain::Score;
+    use KiokuDB::Util qw/set/;
     
     use Golf::Domain::Meta::Types qw/
-        ScoreList
+        ScoreSet
     /;
     
     has 'player' => (
@@ -16,32 +17,27 @@ class Golf::Domain::PlayerRound {
     );
     
     has 'scores' => (
-        metaclass => 'Collection::Array',
-        # XXX: No idea why this fails :(
-#        isa => ScoreList, 
-        isa => 'ArrayRef',
+        does => 'KiokuDB::Set',
+#        isa => ScoreSet,
         is => 'rw',
-        default => sub { [] },
-        provides => {
-            'push' => '_add_score',
-            'get' => '_get_score',
-            'set' => '_set_score',
-            'count' => 'count_scores',
-            'map' => '_map_scores',
-            'grep' => '_grep_scores',
-        },
+        default => sub { set() },
+        handles => {
+            'count_scores' => 'size',
+            'add_score' => 'insert',
+        }
     );
-    method set_score(Golf::Domain::Hole $hole, Golf::Domain::Score $score) {
-        $self->_set_score($hole->idx - 1, $score);
-    }
     method get_score(Golf::Domain::Hole $hole) {
-        return $self->_get_score($hole->idx - 1);
+        my ($score) = grep {
+            $_->hole == $hole;
+        } $self->scores->members;
+        return $score;
     }
     method total_score() {
         my $s = 0;
-        $self->_map_scores(sub {
+        map {
             $s += $_->score
-        });
+        } $self->scores->members;
         return $s;
     }
+
 }
