@@ -45,7 +45,7 @@ with Golf::Domain::Meta::Updateable {
         $round->course->add_round($round);
         $round;
     }
-    method update_players(HashRef $args) {
+    method update_players(HashRef $args, Golf::Domain $domain) {
         # should take care of removing players that are no longer there
         # and adding new players etc.
         $self->course->add_round($self);
@@ -56,7 +56,11 @@ with Golf::Domain::Meta::Updateable {
         my @rounds = $self->players->members;
         foreach my $pr (@rounds) {
             unless (grep { $pr->player->id eq $_ } @$new_players) {
+                
+                
                 $pr->player->remove_round($self);
+                $domain->directory->store($pr->player);
+                
                 $pr = ();
             }
         }

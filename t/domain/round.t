@@ -54,6 +54,11 @@ my $rid;
         course => 'Ekeberg',
         players => ['seth', 'mesh']
     });
+    
+    ok($r->has_player('mesh'), "we have mesh in this round now");
+    ok($r->has_player('seth'), "we have seth in this round now");
+    ok(!$r->has_player('omega'), "we no longer have omega in this round");
+    
 }
 {
     my $s = $D->new_scope;
