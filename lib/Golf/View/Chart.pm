@@ -35,7 +35,7 @@ sub process {
         %{ $D->{options} }
     );
     
-    if ($D->{options}->{format} eq 'png') {
+    if ($D->{options}->{format} and $D->{options}->{format} eq 'png') {
         $c->res->content_type('image/png');
     } else {
         $c->res->content_type('image/svg+xml');
@@ -70,9 +70,11 @@ sub process {
     if (my $t = $D->{ticks}) {
         $context->domain_axis->tick_values($t->{values});
         $context->domain_axis->tick_labels($t->{labels});
-        $context->domain_axis->tick_label_angle(1.5);
+        $context->domain_axis->tick_label_angle(
+            defined $t->{angle} ? $t->{angle} : 1.5
+        );
         
-        $cc->legend->visible(0);
+        $cc->legend->visible(0) unless $t->{legend};
     }
     $context->range_axis->format('%d');
     $context->range_axis->fudge_amount(0.1);
