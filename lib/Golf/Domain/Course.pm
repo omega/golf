@@ -40,6 +40,7 @@ with Golf::Domain::Meta::Updateable
             'has_round' => 'has',
             'add_round' => 'insert',
             'remove_round' => 'remove',
+            'number_of_rounds' => 'size',
             
         }
     );
