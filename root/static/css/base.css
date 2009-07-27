@@ -7,6 +7,8 @@ div#content {
     ul.submenu {
         border: 1px solid #ddd;
         -webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
+        border-radius: 10px;
         padding: 5px 20px;
         position: absolute;
         top: 40px;
@@ -32,6 +34,8 @@ ul#menu {
     top: 0;
     background: #ddd;
     -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
     padding: 5px 20px;
     padding-right: 5px;
     
