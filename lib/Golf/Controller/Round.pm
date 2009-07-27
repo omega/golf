@@ -163,6 +163,50 @@ sub add_score : Chained('load') Args(0) {
     
 }
 
+sub chart : Chained('load') Args(0) PathPart('chart') {
+    my ( $self, $c ) = @_;
+    
+    my $r = $c->stash->{round};
+    
+    
+    my $players = {};
+    my $ticks = {
+        legend => 1,
+        angle => 0,
+    };
+    
+    my $c_par = 0;
+    foreach my $h (sort { $a->idx <=> $b->idx } $r->course->holes->members) {
+        $c_par += $h->par;
+        push( @{$ticks->{values}}, $h->idx);
+        push( @{$ticks->{labels}}, $h->idx);
+        
+        foreach my $p ($r->players->members)  {
+            my $pid = $p->player->id;
+            $players->{$pid}->{cum} += $p->get_score($h)->score;
+            $players->{$pid}->{s}->{name} = $pid unless $players->{$pid}->{s}->{name};
+            push( @{ $players->{$pid}->{s}->{values} }, $players->{$pid}->{cum} - $c_par );
+            push( @{ $players->{$pid}->{s}->{keys} }, $h->idx );
+        }
+    }
+    use Data::Dump qw/dump/;
+
+    $c->stash(
+        current_view => 'Chart',
+        data => {
+            options => {
+                height => 400,
+            },
+            series => [ map { $_->{s} } values(%$players) ],
+            ticks => $ticks,
+            show_legend => 1,
+            chart => {
+                type => 'Line',
+            },
+        },
+    );
+
+}
 =head1 AUTHOR
 
 Andreas Marienborg
