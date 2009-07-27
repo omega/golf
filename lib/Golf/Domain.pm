@@ -43,7 +43,7 @@ class Golf::Domain extends KiokuX::Model {
         }
     }
     method remove(Object $obj) {
-        $obj->remove if ($obj->can('remove'));
+        $obj->remove($self) if ($obj->can('remove'));
         $self->directory->delete($obj);
     }
     method find(Str $class, HashRef $query) {
