@@ -25,11 +25,11 @@ with Golf::Domain::Meta::Updateable {
         
         unless (ref($args->{players} eq 'ARRAY')) {
             my $ps = $args->{players};
-            $ps = [$ps] unless ref($ps);
+            $ps = [$ps] unless (ref($ps) eq 'ARRAY');
             map {
                 $_ = Golf::Domain::PlayerRound->new(
                     player => Golf::Domain::Search->coerce_player($_)
-                );
+                ) unless (ref($_) and $_->isa('Golf::Domain::Player'));
             } @$ps;
             
             $args->{players} = $ps;
@@ -59,6 +59,11 @@ with Golf::Domain::Meta::Updateable {
                 
                 
                 $pr->player->remove_round($self);
+                
+                ## Since the once we remove are no longer part
+                ## of the graph for the Round, we have to store
+                ## them after removing the round here.
+                
                 $domain->directory->store($pr->player);
                 
                 $pr = ();
@@ -78,11 +83,15 @@ with Golf::Domain::Meta::Updateable {
         } @rounds;
         $self->players(\@rounds);
     }
-    method remove {
+    method remove(Golf::Domain $domain) {
         # Walk the players and REMOVE this round from their rounds
         map {
             $_->player->remove_round($self);
+            $domain->directory->store($_->player);
         } $self->players->members;
+        
+        $self->course->remove_round($self);
+        
     }
     
     has 'id'    => (
