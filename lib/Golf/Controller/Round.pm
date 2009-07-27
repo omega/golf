@@ -117,12 +117,12 @@ sub handle_scores : Private {
     my ( $self, $c, $round ) = @_;
     
     # work trough the post params and set hole scores
-    foreach my $hole (@{ $round->course->holes }) {
+    foreach my $hole ($round->course->holes->members) {
         $c->log->debug('hole #' . $hole->idx) if $c->debug;
         my $i = $hole->idx;
         my $scores = {};
         
-        foreach my $pr (@{ $round->players }) {
+        foreach my $pr ($round->players->members) {
             $c->log->debug('   player ' . $pr->player->id) if $c->debug;
             my $score = $c->req->params->{$i . "_" . $pr->player->id};
             
