@@ -5,7 +5,7 @@
 <p><a href="[% c.uri_for_action(c.action(), c.req.captures, 'edit') %]">Edit round</a></p>
 <h3>Players</h3>
 <ul>
-    [% FOREACH player IN round.players %]
+    [% FOREACH player IN round.players.members %]
     <li><a href="[% c.uri_for('/player', player.player.id) %]">[% player.player.name %]</a> ([% player.player.id %])</li>
     [% END %]
 </ul>
@@ -22,7 +22,7 @@
         <div class="right">
             <form method="POST" action="[% c.uri_for_action(c.action(), c.req.captures, 'add_score') %]">
                 <fieldset class="checkboxes inputs players">
-                [% FOREACH player IN round.players %]
+                [% FOREACH player IN round.players.members %]
                 <label>[% player.player.id %]
                     <input type="text" id="p_[% player.player.id %]" 
                     name="p_[% player.player.id %]" />
@@ -39,16 +39,16 @@
     <thead>
     <tr>
         <th>Hole</th>
-        [% FOREACH player IN round.players %]
+        [% FOREACH player IN round.players.members %]
         <th>[% player.player.id %]</th>
         [% END %]
     </tr>
     </thead>
     <tbody>
-    [% FOREACH hole IN round.course.holes %]
+    [% FOREACH hole IN round.course.holes.members.nsort('idx') %]
     <tr>
         <td>[% hole.idx %] (p[% hole.par %])</td>
-        [% FOREACH pr IN round.players %]
+        [% FOREACH pr IN round.players.members %]
         <td [% IF pr.get_score(hole).dropped %] class="drop"[% END %]>[% pr.get_score(hole).score %]</td>
         [% END %]
     </tr>
@@ -56,12 +56,12 @@
     </tbody>
     <tfoot>
         <tr><th>Total</th>
-            [% FOREACH pr IN round.players %]
+            [% FOREACH pr IN round.players.members %]
             <td>[% pr.total_score %]</td>
             [% END %]
         </tr>
         <tr><th>Result</th>
-            [% FOREACH pr IN round.players %]
+            [% FOREACH pr IN round.players.members %]
             <td>[% pr.total_score - round.course.par %]</td>
             [% END %]
         </tr>

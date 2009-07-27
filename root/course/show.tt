@@ -16,7 +16,7 @@
 </dl>
 <h3>Pars</h3>
 <dl>
-    [% FOREACH hole IN course.holes %]
+    [% FOREACH hole IN course.holes.members.nsort("idx") %]
     <dt>#[% hole.idx %]</dt><dd>[% hole.par %]</dd>
     [% END %]
 </dl>

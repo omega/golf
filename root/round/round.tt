@@ -16,7 +16,9 @@
     
     <fieldset class="checkboxes players">
         <legend>Players</legend>
-        [% FOREACH player IN players.all.sort('name') %]
+        [% SET players = players.all; IF players.isa('Golf::Domain::Player');
+            SET players = [ players ]; END %]
+        [% FOREACH player IN players.sort('name') %]
         <label for="p_[% player.id %]">
             <input id="p_[% player.id %]" type="checkbox" name="players" value="[% player.id %]" [% IF round.has_player(player.id) %] checked="checked"[% END %] />
             [% player.name %]

@@ -6,7 +6,9 @@
             <th>Name</th><th>Rounds</th><th></th>
         </tr>
     </thead>
-[% FOREACH player IN players.all.sort('name') %]
+    [% SET players = players.all; IF players.isa('Golf::Domain::Player');
+        SET players = [ players ]; END %]
+[% FOREACH player IN players.sort('name') %]
     <tr>
         <td>[% player.name %]</td>
         <td>[% player.rounds.size %]</td>
