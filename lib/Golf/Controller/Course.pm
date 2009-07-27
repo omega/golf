@@ -66,7 +66,7 @@ sub create : Local {
 sub load : Chained('/') CaptureArgs(1) PathPart('course') {
     my ($self, $c, $id) = @_;
     my $p = $c->model('Kioku')->model->find('Course' => { name => $id });
-    $c->log->debug('found player: ' . $p) if $c->debug;
+    $c->log->debug('found course: ' . $p) if $c->debug;
     $c->stash( course =>  $p);
 }
 
@@ -77,7 +77,6 @@ sub show : Chained('load') Args(0) PathPart('') {
 sub chart : Chained('load') Args(0) PathPart('chart') {
     my ( $self, $c ) = @_;
     
-    my $rounds = $c->stash->{course}->rounds;
     
     my $ignore = $c->req->params->{ignore};
     my @ignore = (ref $ignore ? @$ignore : (
@@ -86,10 +85,13 @@ sub chart : Chained('load') Args(0) PathPart('chart') {
     $c->log->debug('ignore: ' . join(", ", @ignore)) if $c->debug;
     
     my $players = {};
-    foreach my $r (@$rounds) {
-        
-        foreach my $p (@{$r->players})  {
+
+    my @rounds = $c->stash->{course}->rounds->members;
+    foreach my $r (@rounds) {
+        $c->log->debug('round: ' . $r) if $c->debug;
+        foreach my $p ($r->players->members)  {
             my $pid = $p->player->id;
+            $c->log->debug('  player: ' . $pid) if $c->debug;
             if (scalar(@ignore) and grep { $pid eq $_ } @ignore) {
                 $c->log->debug('ignoring ' . $pid) if $c->debug;
                 next;
@@ -97,7 +99,7 @@ sub chart : Chained('load') Args(0) PathPart('chart') {
             $players->{$pid}->{n} = $pid;
             $players->{$pid}->{k} = scalar(keys(%$players)) 
                 unless $players->{$pid}->{k};
-            $players->{$pid}->{v}->{$p->total_score}++;
+            $players->{$pid}->{v}->{ ($p->total_score - $c->stash->{course}->par) }++;
         }
     }
     use Data::Dump qw/dump/;
