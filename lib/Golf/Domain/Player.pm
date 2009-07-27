@@ -76,9 +76,9 @@ with Golf::Domain::Meta::Updateable {
         return values(%$courses);
     }
     method rounds_by_course_name(Str $name) {
-        my @rounds = $self->_grep_rounds( sub {
+        my @rounds = grep {
             $_->course->name eq $name
-        });
+        } $self->rounds->members;
         \@rounds;
     }
 }
