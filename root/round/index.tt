@@ -1,7 +1,10 @@
 [% PROCESS round/submenu.tt %]
 
 <ul>
-[% FOREACH round IN rounds.all.sort('date').reverse %]
+    [% SET rounds = rounds.all; IF rounds.isa('Golf::Domain::Round');
+        SET rounds = [ rounds ]; END %]
+    
+[% FOREACH round IN rounds.sort('date').reverse %]
     <li>[% round.course.name %], [% round.date %] - <a href="[% c.uri_for(c.action, round.id) %]">Details</a> - <a href="[% c.uri_for(c.action, round.id, 'delete') %]">Delete</a></li>
 [% END %]
 </ul>
