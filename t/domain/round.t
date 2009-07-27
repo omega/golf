@@ -18,6 +18,7 @@ my $rid;
         date    => '2009-05-22',
     );
     is($round->course->name, "Ekeberg2");
+    is($course->number_of_rounds, 1);
     $rid = $round->id;
     
     my $s = $D->new_scope;
@@ -37,6 +38,7 @@ my $rid;
     });
     
     is($r->course->name, "Ekeberg");
+    is($r->course->number_of_rounds, 1);
     
     isa_ok($r, "Golf::Domain::Round");
     $rid = $r->id;
@@ -125,5 +127,13 @@ my $rid;
     ok($D->lookup('user:seth')->has_round($r), "seth has this round");
     ok($D->lookup('user:mesh')->has_round($r), "mesh has this round");
     ok($D->lookup('user:omega')->has_round($r), "omega has this round");
+
+    my $rounds = $D->search({ TYPE => 'Round' });
+    is(scalar($rounds->all), 3);
+    $D->remove($r);
+}
+{
+    my $rounds = $D->search({ TYPE => 'Round' });
     
+    is(scalar($rounds->all), 2);
 }

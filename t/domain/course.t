@@ -30,6 +30,7 @@ my $cid;
     });
     is($c->size, 1);
     is($c->par, 3);
+    is($c->number_of_rounds, 0);
 }
 
 {
