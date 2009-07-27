@@ -1,6 +1,17 @@
 [% PROCESS round/submenu.tt %]
 
 <h2>A round of discgolf at [% round.course.name %]</h2>
+
+<div class="fright">
+    <h3>Stats</h3>
+    <!-- 
+    <img src="[% c.uri_for_action(c.controller('Course').action_for('chart'), c.req.captures) %]" />
+    
+    -->
+    <object data="[% c.uri_for_action(c.controller('Round').action_for('chart'), c.req.captures, { ignore => c.req.params.ignore }) %]" type="image/svg+xml" width="600" height="400" />
+    
+</div>
+
 <h3>Date: [% round.date %]</h3>
 <p><a href="[% c.uri_for_action(c.action(), c.req.captures, 'edit') %]">Edit round</a></p>
 <h3>Players</h3>
