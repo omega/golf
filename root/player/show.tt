@@ -9,7 +9,7 @@
         </tr>
     </thead>
     <tbody>
-    [% FOREACH round IN player.rounds.members; SET pr = round.get_player(player.id) %]
+    [% FOREACH round IN player.rounds.members.sort('date').reverse; SET pr = round.get_player(player.id) %]
     [% SET captures = c.req.captures.slice(0); captures.push(round.course.name) %]
         <tr>
             <td>[% round.date %]</td>

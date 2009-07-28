@@ -8,11 +8,12 @@
         </tr>
     </thead>
     <tbody>
-    [% FOREACH round IN rounds; SET pr = round.get_player(player.id) %]
+    [% FOREACH round IN rounds.sort('date').reverse; SET pr = round.get_player(player.id) %]
         <tr>
             <td>[% round.date %]</td>
             <td>[% pr.total_score %]</td>
             <td>[% pr.total_score - round.course.par %]</td>
+            <td><a href="[% c.uri_for('/round', round.id) %]">details</a></td>
         </tr>
     [% END %]
     </tbody>
