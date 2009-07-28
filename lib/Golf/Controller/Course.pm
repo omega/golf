@@ -133,14 +133,13 @@ sub chart : Chained('load') Args(0) PathPart('chart') {
         
         push(@series, $s);
     }
+    $c->log->debug(" series: \n\n" . dump(@series) . "\n\n") if $c->debug;
+    $c->log->debug(" ticks: \n\n" . dump($ticks) . "\n\n") if $c->debug;
     $c->stash(
         current_view => 'Chart',
         data => {
             options => {
                 height => 400,
-            },
-            marker => {
-                value => $c->stash->{course}->par,
             },
             serie_type => 'Series::Size',
             series => [ @series ],
