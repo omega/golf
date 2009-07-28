@@ -98,7 +98,7 @@ sub process {
         $context->renderer( $type->new($chart->{args} || () ) );
     } else {
         # fix up the default renderer somewhat :p
-        $context->renderer->shape(Geometry::Primitive::Circle->new({ radius => 5, }));
+        $context->renderer->shape(Geometry::Primitive::Circle->new({ radius => 3, }));
         $context->renderer->shape_brush(Graphics::Primitive::Brush->new({ 
             width => 1, 
             color => Graphics::Color::RGB->new(red => 0.95, green => 0.94, blue => 0.92)
