@@ -51,7 +51,7 @@ sub chart : Chained('load') Args(0) PathPart('chart') {
     my $rounds = $c->stash->{rounds};
     
     my (@keys, @values);
-    foreach my $r (@$rounds) {
+    foreach my $r (sort { $a->date cmp $b->date } @$rounds) {
         push(@keys, $r->date->epoch);
         push(@values, $r->get_player($c->stash->{player}->id)->total_score);
     }
