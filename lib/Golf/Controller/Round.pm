@@ -166,6 +166,13 @@ sub add_score : Chained('load') Args(0) {
 sub chart : Chained('load') Args(0) PathPart('chart') {
     my ( $self, $c ) = @_;
     
+    
+    my $ignore = $c->req->params->{ignore};
+    my @ignore = (ref $ignore ? @$ignore : (
+        $ignore ? ($ignore) : ())
+        );
+    $c->log->debug('ignore: ' . join(", ", @ignore)) if $c->debug;
+    
     my $r = $c->stash->{round};
     
     
@@ -183,6 +190,11 @@ sub chart : Chained('load') Args(0) PathPart('chart') {
         
         foreach my $p ($r->players->members)  {
             my $pid = $p->player->id;
+            
+            if (scalar(@ignore) and grep { $pid eq $_ } @ignore) {
+                next;
+            }
+            
             $players->{$pid}->{cum} += $p->get_score($h)->score;
             $players->{$pid}->{s}->{name} = $pid unless $players->{$pid}->{s}->{name};
             push( @{ $players->{$pid}->{s}->{values} }, $players->{$pid}->{cum} - $c_par );
@@ -200,9 +212,6 @@ sub chart : Chained('load') Args(0) PathPart('chart') {
             series => [ map { $_->{s} } values(%$players) ],
             ticks => $ticks,
             show_legend => 1,
-            chart => {
-                type => 'Line',
-            },
         },
     );
 
