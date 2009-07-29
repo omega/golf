@@ -31,7 +31,10 @@ sub begin : Private {
     $c->assets->include('static/css/base.css');
     $c->assets->include('static/js/jquery.js');
     $c->assets->include('static/js/jquery-ui.js');
+    $c->assets->include('static/js/jquery.tablesorter.min.js');
+    $c->assets->include('static/themes/blue/style.css');
     $c->assets->include('static/themes/smoothness/jquery-ui-1.7.1.custom.css');
+    $c->assets->include('static/js/onload.js');
     
 }
 sub index : Private {

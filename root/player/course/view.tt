@@ -1,7 +1,7 @@
 [% PROCESS player/submenu.tt %]
 <img class="chart fright" src="[% c.uri_for_action(c.controller.action_for('chart'), c.req.captures) %]" />
 <a href="[% c.uri_for(c.controller('Player').action_for('show'), [player.id]) %]">[% player.id %]</a> has played the following rounds on [% course.name %]
-<table>
+<table class="tablesorter">
     <thead>
         <tr>
             <th>Date</th><th>Sum</th><th>Score</th>
@@ -11,8 +11,8 @@
     [% FOREACH round IN rounds.sort('date').reverse; SET pr = round.get_player(player.id) %]
         <tr>
             <td>[% round.date %]</td>
-            <td>[% pr.total_score %]</td>
-            <td>[% pr.total_score - round.course.par %]</td>
+            <td class="number">[% pr.total_score %]</td>
+            <td class="number">[% pr.total_score - round.course.par %]</td>
             <td><a href="[% c.uri_for('/round', round.id) %]">details</a></td>
         </tr>
     [% END %]

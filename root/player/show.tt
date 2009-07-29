@@ -2,20 +2,21 @@
 <h2>[% player.name %]</h2>
 <p>[% player.description %]</p>
 <p><a href="[% c.uri_for_action(c.action(), c.req.captures, 'edit') %]">Edit player</a></p>
-<table>
+<table class="tablesorter">
     <thead>
         <tr>
             <th>Date</th><th>Course</th><th>Sum</th><th>Score</th>
         </tr>
     </thead>
     <tbody>
-    [% FOREACH round IN player.rounds.members.sort('date').reverse; SET pr = round.get_player(player.id) %]
+        [% SET prounds = player.rounds.members; IF prounds.isa('Golf::Domain::Round'); SET prounds = [ prounds ]; END %]
+    [% FOREACH round IN prounds.sort('date').reverse; SET pr = round.get_player(player.id) %]
     [% SET captures = c.req.captures.slice(0); captures.push(round.course.name) %]
         <tr>
             <td>[% round.date %]</td>
             <td><a href="[% c.uri_for_action(c.controller('Player::Course').action_for('view'), captures ) %]">[% round.course.name %]</a></td>
-            <td>[% pr.total_score %]</td>
-            <td>[% pr.total_score - round.course.par %]</td>
+            <td class="number">[% pr.total_score %]</td>
+            <td class="number">[% pr.total_score - round.course.par %]</td>
         </tr>
     [% END %]
     </tbody>

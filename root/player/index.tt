@@ -1,9 +1,9 @@
 [% PROCESS player/submenu.tt %]
 
-<table>
+<table class="tablesorter">
     <thead>
         <tr>
-            <th>Name</th><th>Rounds</th><th></th>
+            <th>Name</th><th>Rounds</th>
         </tr>
     </thead>
     [% SET players = players.all; IF players.isa('Golf::Domain::Player');

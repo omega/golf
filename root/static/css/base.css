@@ -95,6 +95,14 @@ table {
     th {
         border-bottom: 1px dotted silver;
     }
+
+
+table.tablesorter {
+    border-collapse: inherit;
+}
+    table.tablesorter thead tr {
+        border: 1px solid #CDCDCD;
+    }
 form {
     padding: 10px;
 }
