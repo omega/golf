@@ -24,6 +24,8 @@ use Catalyst qw/
     Session::State::Cookie
     
     Static::Simple
+    
+    Unicode
 /;
 
 our $VERSION = '0.01';

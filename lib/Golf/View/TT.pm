@@ -6,6 +6,7 @@ use base 'Catalyst::View::TT';
 __PACKAGE__->config(
     TEMPLATE_EXTENSION => '.tt',
     WRAPPER => 'inc/wrap.tt',
+    ENCODING => 'utf-8',
 );
 
 =head1 NAME
