@@ -1,15 +1,15 @@
-[% PROCESS course/submenu.tt %]
 <h2>[% course.name %]</h2>
 <div class="fright">
     <h3>Stats</h3>
-    <!-- 
-    <img src="[% c.uri_for_action(c.controller('Course').action_for('chart'), c.req.captures) %]" />
-    
-    -->
-    <object data="[% c.uri_for_action(c.controller('Course').action_for('chart'), c.req.captures, { ignore => c.req.params.ignore }) %]" type="image/svg+xml" width="600" height="400" />
+    <object data="[% c.uri_for_action(c.controller('Course').action_for('chart'), c.req.captures, { ignore => c.req.params.ignore }) %]" type="image/svg+xml" width="600" height="500" />
     
 </div>
-<p><a href="[% c.uri_for_action(c.action(), c.req.captures, 'edit') %]">Edit course</a></p>
+<h3>Actions</h3>
+<ul>
+    <li><a href="[% c.uri_for_action(c.action(), c.req.captures, 'edit') %]">Edit</a></li>
+</ul>
+
+<h3>Key numbers</h3>
 <dl>
     <dt>Par</dt><dd>[% course.par %]</dd>
     <dt>Holes</dt><dd>[% course.size %]</dd>
@@ -20,3 +20,5 @@
     <dt>#[% hole.idx %]</dt><dd>[% hole.par %]</dd>
     [% END %]
 </dl>
+
+<div style="clear: both"></div>

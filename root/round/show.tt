@@ -3,17 +3,23 @@
 <h2>A round of discgolf at [% round.course.name %]</h2>
 
 <div class="fright">
+    <h3>Actions</h3>
+    <ul>
+        <li><a href="[% c.uri_for_action(c.action(), c.req.captures, 'edit') %]">Edit</a></li>
+        <li><a href="[% c.uri_for(c.action, round.id, 'delete') %]">Delete</a></li>
+    </ul>
+    
     <h3>Stats</h3>
     <!-- 
     <img src="[% c.uri_for_action(c.controller('Course').action_for('chart'), c.req.captures) %]" />
     
     -->
-    <object data="[% c.uri_for_action(c.controller('Round').action_for('chart'), c.req.captures, { ignore => c.req.params.ignore }) %]" type="image/svg+xml" width="600" height="400" />
-    
+    <object data="[% c.uri_for_action(c.controller('Round').action_for('chart'), c.req.captures, { ignore => c.req.params.ignore }) %]" type="image/svg+xml" width="400" height="300" />
+        
+        
 </div>
 
 <h3>Date: [% round.date %]</h3>
-<p><a href="[% c.uri_for_action(c.action(), c.req.captures, 'edit') %]">Edit round</a></p>
 <h3>Players</h3>
 <ul>
     [% FOREACH player IN round.players.members %]
@@ -59,8 +65,8 @@
     [% FOREACH hole IN round.course.holes.members.nsort('idx') %]
     <tr>
         <td>[% hole.idx %] (p[% hole.par %])</td>
-        [% FOREACH pr IN round.players.members %]
-        <td [% IF pr.get_score(hole).dropped %] class="drop"[% END %]>[% pr.get_score(hole).score %]</td>
+        [% FOREACH pr IN round.players.members; SET s = pr.get_score(hole) %]
+        <td class="number[% IF s.dropped %] drop[% END %]">[% s.score %]</td>
         [% END %]
     </tr>
     [% END%]
@@ -68,12 +74,12 @@
     <tfoot>
         <tr><th>Total</th>
             [% FOREACH pr IN round.players.members %]
-            <td>[% pr.total_score %]</td>
+            <td class="number">[% pr.total_score %]</td>
             [% END %]
         </tr>
         <tr><th>Result</th>
             [% FOREACH pr IN round.players.members %]
-            <td>[% pr.total_score - round.course.par %]</td>
+            <td class="number">[% pr.total_score - round.course.par %]</td>
             [% END %]
         </tr>
             

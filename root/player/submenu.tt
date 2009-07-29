@@ -1,4 +1,2 @@
-<ul class="submenu">
-    <li><a href="[% c.uri_for('/player/create') %]">Add player</a></li>
-    <li><a href="[% c.uri_for('/player') %]">List players</a></li>
-</ul>
+    <li class="submenu"><a href="[% c.uri_for('/player/create') %]">Add player</a></li>
+    <li class="submenu"><a href="[% c.uri_for('/player') %]">List players</a></li>

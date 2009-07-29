@@ -1,9 +1,7 @@
-[% PROCESS course/submenu.tt %]
-
 <table>
     <thead>
         <tr>
-            <th>Name</th><th>Par</th><th>Holes</th><th>Rounds</th><th></th>
+            <th>Name</th><th>Par</th><th>Holes</th><th>Rounds</th>
         </tr>
     </thead>
 [% FOREACH course IN courses.all %]

@@ -14,21 +14,30 @@
     </head>
     <body>
         <div id="wrapper">
-        <h1 id="logo"><a href="[% c.uri_for('/') %]">Golfscore Tracker</a></h1>
-        <ul id="menu">
-            <li><a href="[% c.uri_for('/player') %]">Players</a></li>
-            <li><a href="[% c.uri_for('/course') %]">Courses</a></li>
-            <li><a href="[% c.uri_for('/round') %]">Rounds</a></li>
-        </ul>
-        <div id="content">
-            [% IF msg %]
-            <p class="msg">[% msg %]</p>
-            [% END %]
-            [% IF err %]
-            <p class="err">[% err %]</p>
-            [% END %]
-            [% content %]
-        </div>
+            <div id="top">
+                <h1 id="logo"><a href="[% c.uri_for('/') %]">Golfscore Tracker</a></h1>
+            </div>
+            <ul id="menu">
+                <li><a href="[% c.uri_for('/player') %]">Players</a></li>
+                <li><a href="[% c.uri_for('/course') %]">Courses</a></li>
+                [% SET tmpl = c.req.path.split('/').0 _ '/submenu.tt';
+                    TRY; 
+                        INCLUDE $tmpl;
+                    CATCH;
+                    %] <!-- no submenu: [% tmpl %] -->
+                    [% END; %]
+                <div style="clear:both"></div>
+            </ul>
+            <a class="button" id="add_round" href="[% c.uri_for('/round/create') %]">Add round</a>
+            <div id="content">
+                [% IF msg %]
+                <p class="msg">[% msg %]</p>
+                [% END %]
+                [% IF err %]
+                <p class="err">[% err %]</p>
+                [% END %]
+                [% content %]
+            </div>
         </div>
     </body>
 </html>

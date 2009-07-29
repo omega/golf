@@ -1,4 +1,0 @@
-<ul class="submenu">
-    <li><a href="[% c.uri_for('/round/') %]">List rounds</a></li>
-    <li><a href="[% c.uri_for('/round/create') %]">Add round</a></li>
-</ul>

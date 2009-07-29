@@ -1,4 +1,3 @@
-[% PROCESS player/submenu.tt %]
 <img class="chart fright" src="[% c.uri_for_action(c.controller.action_for('chart'), c.req.captures) %]" />
 <a href="[% c.uri_for(c.controller('Player').action_for('show'), [player.id]) %]">[% player.id %]</a> has played the following rounds on [% course.name %]
 <table class="tablesorter">

@@ -1,5 +1,3 @@
-[% PROCESS player/submenu.tt %]
-
 <table class="tablesorter">
     <thead>
         <tr>

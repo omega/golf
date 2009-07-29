@@ -1,51 +1,114 @@
-h1#logo {
-    padding-bottom: 1em;
-    border-bottom: 1px solid #ddd;
+* {
+    padding: 0;
+    margin: 0;
 }
-div#content {
+body {
+    background: #101010;
+    color: white;
+    font-size: 78%;
+    font-family: Verdana, Tahoma, sans-serif;
+    
+    
 }
-    ul.submenu {
-        border: 1px solid #ddd;
-        -webkit-border-radius: 10px;
-        -moz-border-radius: 10px;
-        border-radius: 10px;
-        padding: 5px 20px;
-        position: absolute;
-        top: 40px;
-        left: 300px;
-        padding-right: 5px;
+    div#wrapper {
+        width: 880px;
+        margin: 15px auto;
+        position: relative;
+
     }
-        ul.submenu li {
-            list-style: none;
-            float: left;
-            margin-right: 15px;
+    
+        div#top {
+            background: rgb(135, 132, 0);
+            padding: 15px;
+            padding-bottom: 0px;
+            position: relative;
         }
-div#wrapper {
-    width: 880px;
-    margin: 15px auto;
-    position: relative;
-    border: 1px solid silver;
-    padding: 15px;
-}
+
+            h1#logo {
+                padding-bottom: 1em;
+                background: #FDF700;
+                color: white;
+                padding: 0;
+                height: 100px;
+                position: relative;
+            }
+                h1#logo a {
+                    color: white;
+                    text-decoration: none;
+                    position: absolute;
+                    bottom: 15px;
+                    font-family: Verdana, Tahoma, sans-serif;
+                    left: 15px;
+                    width: 170px;
+                    line-height: 1.1em;
+                    text-align: right;
+                }
+    div#content {
+        margin: 0 15px;
+        padding: 15px;
+        background: #878400;
+    }
+
+
+
+
 
 ul#menu {
-    position: absolute;
-    left: 300px;
-    top: 0;
-    background: #ddd;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    border-radius: 10px;
-    padding: 5px 20px;
-    padding-right: 5px;
-    
+    height: 26px;
+    padding: 1px 0;
+    margin: 0 15px;
+
 }
     ul#menu li {
         list-style: none;
         float: left;
-        margin-right: 15px;
+        width: 20%;
+    }
+    ul#menu li.submenu {
+        float: right;
+    }
+        ul#menu a, .button {
+            display: block;
+            background: #C50482;
+            color: #680044;
+            text-decoration: none;
+            margin: 1px;
+            text-align: center;
+            font-size: 10px;
+            height: 24px;
+            line-height: 24px;
+            text-transform: uppercase;
+        }
+
+    .button {
+        padding: 0 15px;
+    }
+    #add_round {
+        position: absolute;
+        right: 30px;
+        top: 21px;
     }
 
+a {
+    color: #FDF700;
+}
+h2, h3, h4, h5, h6 {
+    color: #AAEF00;
+    font-weight: normal;
+}
+
+h2 {
+    margin: 0.5em 0 0.3em;
+    font-size: 18px
+}
+h3 {
+    margin: 0.5em 0 0.1em;
+}
+ul {
+    list-style: square;
+    padding-left: 20px;
+    margin: 0.2em 0 0.4em;
+}
 div.columns {
     position: relative;
 }
@@ -84,25 +147,22 @@ dl {
     }
 
 table {
-    border-collapse: collapse;
+    text-align: left;
 }
     .number {
         text-align: right;
     }
     td, th {
-        padding: 3px 10px;
+        padding: 4px;
+        vertical-align: top;
     }
     th {
-        border-bottom: 1px dotted silver;
+        background-color: #AAEF00;
+        border: 1px solid #5B7F00;
+        color: #5B7F00;
+        padding-right: 20px;
     }
 
-
-table.tablesorter {
-    border-collapse: inherit;
-}
-    table.tablesorter thead tr {
-        border: 1px solid #CDCDCD;
-    }
 form {
     padding: 10px;
 }

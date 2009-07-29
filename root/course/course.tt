@@ -1,5 +1,3 @@
-[% PROCESS course/submenu.tt %]
-
 <form autocomplete="off" action="[% c.uri_for_action(c.action, c.req.captures) %]" method="POST">
     <label for="id">
         Name

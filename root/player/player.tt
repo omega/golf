@@ -1,5 +1,3 @@
-[% PROCESS player/submenu.tt %]
-
 <form action="[% c.uri_for_action(c.action, c.req.captures) %]" method="POST">
     <label for="id">
         Username
