@@ -69,9 +69,9 @@ with Golf::Domain::Meta::Updateable {
     method courses() {
         my $courses = {};
         
-        $self->_map_rounds( sub {
+        map {
             $courses->{ $_->course->name } = $_->course;
-        });
+        } $self->rounds->members;
         
         return values(%$courses);
     }

@@ -1,22 +1,39 @@
+<div class="fright">
+    <h3>Actions</h3>
+    <ul>
+        <li><a href="[% c.uri_for_action(c.action(), c.req.captures, 'edit') %]">Edit</a></li>
+    </ul>
+</div>
 <h2>[% player.name %]</h2>
 <p>[% player.description %]</p>
-<p><a href="[% c.uri_for_action(c.action(), c.req.captures, 'edit') %]">Edit player</a></p>
-<table class="tablesorter">
+
+[% FOREACH course IN player.courses.sort('name') %]
+<div style="clear: both;"></div>
+[% SET captures = c.req.captures.slice(0); captures.push(course.name) %]
+
+<h3>[% course.name %]</h3>
+<div class="fright">
+    <img class="chart fright" src="[% c.uri_for_action(c.controller('Player::Course').action_for('chart'), captures, {width => 400, height => 200}) %]" />
+</div>
+<h4>Last rounds</h4>
+
+<table>
     <thead>
         <tr>
-            <th>Date</th><th>Course</th><th>Sum</th><th>Score</th>
+            <th>Date</th><th>Sum</th><th>Score</th>
         </tr>
     </thead>
     <tbody>
-        [% SET prounds = player.rounds.members; IF prounds.isa('Golf::Domain::Round'); SET prounds = [ prounds ]; END %]
-    [% FOREACH round IN prounds.sort('date').reverse; SET pr = round.get_player(player.id) %]
-    [% SET captures = c.req.captures.slice(0); captures.push(round.course.name) %]
+        [% SET prounds = player.rounds_by_course_name(course.name); IF prounds.isa('Golf::Domain::Round'); SET prounds = [ prounds ]; END %]
+    [% FOREACH round IN prounds.sort('date').reverse; LAST IF loop.index() == 5; SET pr = round.get_player(player.id) %]
         <tr>
             <td>[% round.date %]</td>
-            <td><a href="[% c.uri_for_action(c.controller('Player::Course').action_for('view'), captures ) %]">[% round.course.name %]</a></td>
             <td class="number">[% pr.total_score %]</td>
             <td class="number">[% pr.total_score - round.course.par %]</td>
         </tr>
     [% END %]
     </tbody>
 </table>
+<a class="more" href="[% c.uri_for_action(c.controller('Player::Course').action_for('view'), captures ) %]">More details</a></td>
+
+[% END %]

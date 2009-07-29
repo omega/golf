@@ -53,13 +53,15 @@ sub chart : Chained('load') Args(0) PathPart('chart') {
     my (@keys, @values);
     foreach my $r (sort { $a->date cmp $b->date } @$rounds) {
         push(@keys, $r->date->epoch);
-        push(@values, $r->get_player($c->stash->{player}->id)->total_score);
+        push(@values, $r->get_player($c->stash->{player}->id)->total_score - $c->stash->{course}->par);
     }
     $c->stash(
         current_view => 'Chart',
         data => {
             options => { 
-                format => 'png'
+                format => 'png',
+                width => $c->req->param('width') || 500,
+                height => $c->req->param('height') || 300,
             },
             axis => {
                 domain => {
@@ -71,7 +73,7 @@ sub chart : Chained('load') Args(0) PathPart('chart') {
             },
             marker => [
                 {
-                    value => $c->stash->{course}->par,
+                    value => 0,
                 },
                 {
                     key => DateTime->new(year => 2007)->epoch,
