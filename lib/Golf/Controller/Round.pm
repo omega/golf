@@ -6,6 +6,8 @@ use base 'Catalyst::Controller';
 
 use Scalar::Util qw/looks_like_number/;
 
+use Data::Dump qw/dump/;
+
 =head1 NAME
 
 Golf::Controller::Round - Catalyst Controller
@@ -57,8 +59,8 @@ sub create : Local {
             $c->model('Kioku')->model->create(Round => $c->req->params);
         };
         if ($@) {
-            $c->stash( err => 'Error: ' . $@);
-            $c->log->debug('Something went wrong with creating: ' . $@) 
+            $c->stash( err => 'Error: ' . dump($@));
+            $c->log->debug('Something went wrong with creating: ' . dump($@)) 
                 if $c->debug;
         } else {
             
