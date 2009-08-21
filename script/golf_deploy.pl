@@ -13,3 +13,5 @@ use Golf::Domain;
 
 
 my $d = Golf::Domain->new(%$cfg, extra_args => { create => 1 } );
+
+warn "deployed to $d";

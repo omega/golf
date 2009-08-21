@@ -5,7 +5,9 @@ DIR=` cat golf.yml golf_local.yml | grep dsn | tail -n 1 | awk '{ print $2 }' | 
 echo "reseting : $DSN in $DIR"
 
 rm -rf $DIR
+echo "removed old DB, deploying new schema";
 ./script/golf_deploy.pl
+
 if [ -z "$1" ]; then
     echo "loading db.yml"
     kioku load -D $DSN --file db.yml
