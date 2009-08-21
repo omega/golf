@@ -65,4 +65,29 @@ $(document).ready(function() {
             });
         }
     });
+    
+    $('#round_form').submit(function() {
+        
+        // check all the damn score inputs. Either all are empty
+        // or all are filled.
+        
+        var scores = 0;
+        var total = 0;
+        $('.scores input[type="text"]').map( function (i, elem) {
+            if (elem.value) {
+                scores++;
+            }
+            total++;
+        });
+        
+        if (scores == 0) {
+            return true;
+        }
+        
+        if (scores > 0 && scores == total) {
+            return true;
+        }
+        // XXX: Should alert here that there are missing scores
+        return false;
+    });
 });
