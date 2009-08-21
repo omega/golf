@@ -1,11 +1,9 @@
 #!/usr/bin/perl
 
-use Config::Any;
-
 use lib qw(lib);
+use Golf::Config;
 
-my $cfg = Config::Any->load_files({ files => [qw/golf.yml/], use_ext => 1})
-->[0]->{'golf.yml'}->{'Model::Kioku'};
+my $cfg = Golf::Config->config->{'Model::Kioku'};
 
 use Data::Dump qw/dump/;
 
