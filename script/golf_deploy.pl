@@ -1,28 +1,15 @@
 #!/usr/bin/perl
 
-use Config::Any;
-
 use lib qw(lib);
 
 use Data::Dump qw/dump/;
 
-my $cfg = Config::Any->load_files({ files => [qw/golf.yml golf_local.yml/], use_ext => 1});
+use Golf::Config;
 
-
-my $dsn;
-
-foreach (@$cfg) {
-    if ($_->{'golf.yml'} and !$dsn) {
-        # not seen local, setting $dsn
-        $dsn = $_->{'golf.yml'}->{'Model::Kioku'};
-    } elsif ($_->{'golf_local.yml'}) {
-        $dsn = $_->{'golf_local.yml'}->{'Model::Kioku'} if $_->{'golf_local.yml'}->{'Model::Kioku'};
-    }
-}
-
+my $cfg = Golf::Config->config->{'Model::Kioku'};
 
 
 use Golf::Domain;
 
 
-my $d = Golf::Domain->new(%$dsn, extra_args => { create => 1 } );
+my $d = Golf::Domain->new(%$cfg, extra_args => { create => 1 } );
