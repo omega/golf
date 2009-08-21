@@ -10,7 +10,7 @@ my $cfg = Golf::Config->config->{'Model::Kioku'};
 
 
 use Golf::Domain;
-
+warn "loaded code and config";
 
 my $d = Golf::Domain->new(%$cfg, extra_args => { create => 1 } );
 
