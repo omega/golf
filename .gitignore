@@ -1,3 +1,4 @@
 db*
+!db_dump.sh
 full.yml
 golf_local.yml
