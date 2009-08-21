@@ -22,7 +22,6 @@ with Golf::Domain::Meta::Updateable {
         unless (ref($args->{course})) {
             $args->{course} = Golf::Domain::Search->coerce_course($args->{course});
         }
-        
         unless (ref($args->{players} eq 'ARRAY')) {
             my $ps = $args->{players};
             $ps = [$ps] unless (ref($ps) eq 'ARRAY');
@@ -35,7 +34,6 @@ with Golf::Domain::Meta::Updateable {
             $args->{players} = $ps;
         }
         my $round = __PACKAGE__->new($args);
-        
         # walk the players and add this round to their rounds
  
         map {
@@ -43,6 +41,7 @@ with Golf::Domain::Meta::Updateable {
         } $round->players->members;
 
         $round->course->add_round($round);
+
         $round;
     }
     method update_players(HashRef $args, Golf::Domain $domain) {
@@ -89,9 +88,8 @@ with Golf::Domain::Meta::Updateable {
             $_->player->remove_round($self);
             $domain->directory->store($_->player);
         } $self->players->members;
-        
         $self->course->remove_round($self);
-        
+        $domain->directory->store($self->course);
     }
     
     has 'id'    => (
