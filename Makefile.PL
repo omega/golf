@@ -16,6 +16,9 @@ requires 'Config::YAML'; # This should reflect the config file format you've cho
 
 requires 'Catalyst::Model::KiokuDB';
 
+
+requires 'Config::JFDI';
+
 requires 'Module::Load';
 
 

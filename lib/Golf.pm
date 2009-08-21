@@ -15,8 +15,6 @@ use Catalyst::Runtime '5.70';
 #                 directory
 
 use Catalyst qw/
-    ConfigLoader 
-
     Assets
     
     Session
@@ -29,6 +27,8 @@ use Catalyst qw/
 /;
 
 our $VERSION = '0.01';
+
+use Golf::Config;
 
 # Configure the application. 
 #
@@ -43,7 +43,8 @@ __PACKAGE__->config(
     name => 'Golf',
     stacktrace => {
         verbose => 2,
-    }
+    },
+    %{ Golf::Config->config || {} }
 );
 
 # Start the application
